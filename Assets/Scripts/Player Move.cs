@@ -1,14 +1,22 @@
+// using Unity.VisualScripting;
 using UnityEngine;
 // using UnityEngine.Scripting.APIUpdating;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(BoxCollider))]
 public class PlayerMove : MonoBehaviour
 {
-    [Header("playerMove")]
+    [Header("プレイヤー動作")]
     [SerializeField]
-    private float moveSpeed = 5f;
+    private float moveSpeed = 2f;
+
+    private float defaultmoveSpeed;
 
     [SerializeField]
-    private float jumpPower = 7f;
+    private float jumpPower;
+
+    [SerializeField]
+    private float Gravity;
 
 
     private Rigidbody rb;
@@ -18,11 +26,14 @@ public class PlayerMove : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; //回転しない,固定
+
+        defaultmoveSpeed = moveSpeed;  //初期速度記憶
     }
 
 
     void Update()
     {
+        Debug.Log(moveSpeed);
         Playermove();
 
         PlayerJump();
@@ -36,23 +47,40 @@ public class PlayerMove : MonoBehaviour
         );
     }
 
+    void FixedUpdate()
+    {
+        rb.AddForce(Vector3.down * Gravity);
+    }
+
 
     void Playermove()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            moveSpeed = defaultmoveSpeed * 2;
+        }
+        else
+        {
+            moveSpeed = defaultmoveSpeed;
+        }
 
-        rb.linearVelocity = new Vector3(
-            moveX * moveSpeed,
-            rb.linearVelocity.y,
-            0
-        );
+        float moveX = Input.GetAxis("Horizontal");
+
+        float currentX = rb.linearVelocity.x;
+        float targetX = moveX * moveSpeed;
+
+        float smoothX = Mathf.Lerp(currentX, targetX, 0.15f);
+
+        rb.linearVelocity = new Vector3(smoothX,
+        rb.linearVelocity.y,
+        0);
     }
 
 
 
     void PlayerJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded || Input.GetKeyDown(KeyCode.UpArrow) && isGrounded)
         {
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
@@ -62,7 +90,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-
+    //＊ChatGPT使用
     private void OnCollisionStay(Collision collision)
     {
         foreach (ContactPoint contact in collision.contacts)
@@ -74,7 +102,7 @@ public class PlayerMove : MonoBehaviour
             }
         }
     }
-
+    // ＊ChatGPT使用
     private void OnCollisionExit(Collision collision)
     {
         isGrounded = false;
