@@ -33,7 +33,7 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(moveSpeed);
+        // Debug.Log(moveSpeed);
         Playermove();
 
         PlayerJump();
