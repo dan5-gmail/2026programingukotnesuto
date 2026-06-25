@@ -10,14 +10,14 @@ FBXHeaderExtension:  {
 	CreationTimeStamp:  {
 		Version: 1000
 		Year: 2026
-		Month: 5
-		Day: 11
-		Hour: 23
-		Minute: 24
-		Second: 51
-		Millisecond: 369
+		Month: 6
+		Day: 23
+		Hour: 21
+		Minute: 18
+		Second: 3
+		Millisecond: 534
 	}
-	Creator: "Blockbench 5.0.7"
+	Creator: "Blockbench 5.1.4"
 	SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
 		Type: "UserData"
 		Version: 100
@@ -36,20 +36,20 @@ FBXHeaderExtension:  {
 			P: "Original", "Compound", "", ""
 			P: "Original|ApplicationVendor", "KString", "", "", "Blockbench"
 			P: "Original|ApplicationName", "KString", "", "", "Blockbench FBX Exporter"
-			P: "Original|ApplicationVersion", "KString", "", "", "5.0.7"
+			P: "Original|ApplicationVersion", "KString", "", "", "5.1.4"
 			P: "Original|DateTime_GMT", "DateTime", "", "", "01/01/1970 00:00:00.000"
 			P: "Original|FileName", "KString", "", "", "/foobar.fbx"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Blockbench"
 			P: "LastSaved|ApplicationName", "KString", "", "", "Blockbench FBX Exporter"
-			P: "LastSaved|ApplicationVersion", "KString", "", "", "5.0.7"
+			P: "LastSaved|ApplicationVersion", "KString", "", "", "5.1.4"
 			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "01/01/1970 00:00:00.000"
 			P: "Original|ApplicationNativeFile", "KString", "", "", ""
 		}
 	}
 }
 FileId: "iVFoobar"
-CreationTime: "2026-05-11 14:24:51:369"
+CreationTime: "2026-06-23 12:18:03:534"
 Creator: "Made with Blockbench"
 GlobalSettings:  {
 	Version: 1000
@@ -78,7 +78,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 1835392269 {
+	Document: 1992444615 {
 		Scene: "Scene"
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
@@ -98,12 +98,12 @@ References:
 
 Definitions:  {
 	Version: 100
-	Count: 31
+	Count: 72
 	ObjectType: "GlobalSettings" {
 		Count: 1
 	}
 	ObjectType: "Model" {
-		Count: 6
+		Count: 15
 		PropertyTemplate: "FbxNode" {
 			Properties70:  {
 				P: "QuaternionInterpolate", "enum", "", "",0
@@ -262,13 +262,178 @@ Definitions:  {
 			}
 		}
 	}
+	ObjectType: "AnimationStack" {
+		Count: 2
+		PropertyTemplate: "FbxAnimStack" {
+			Properties70:  {
+				P: "Description", "KString", "", "", ""
+				P: "LocalStart", "KTime", "Time", "",0
+				P: "LocalStop", "KTime", "Time", "",0
+				P: "ReferenceStart", "KTime", "Time", "",0
+				P: "ReferenceStop", "KTime", "Time", "",0
+			}
+		}
+	}
+	ObjectType: "AnimationLayer" {
+		Count: 2
+		PropertyTemplate: "FbxAnimLayer" {
+			Properties70:  {
+				P: "Weight", "Number", "", "A",100
+				P: "Mute", "bool", "", "",0
+				P: "Solo", "bool", "", "",0
+				P: "Lock", "bool", "", "",0
+				P: "Color", "ColorRGB", "Color", "",0.8,0.8,0.8
+				P: "BlendMode", "enum", "", "",0
+				P: "RotationAccumulationMode", "enum", "", "",0
+				P: "ScaleAccumulationMode", "enum", "", "",0
+				P: "BlendModeBypass", "ULongLong", "", "",0
+			}
+		}
+	}
+	ObjectType: "AnimationCurveNode" {
+		Count: 7
+		PropertyTemplate: "FbxAnimCurveNode" {
+			Properties70:  {
+				P: "d", "Compound", "", ""
+			}
+		}
+	}
+	ObjectType: "AnimationCurve" {
+		Count: 21
+	}
 }
 
 ; Object properties
 ;------------------------------------------------------------------
 
 Objects:  {
-	Model: 73458298, "Model::Playerbody", "Mesh" {
+	Model: 79153505, "Model::Body", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 70753442, "Model::Leg group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 71122821, "Model::right leg group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 71732264, "Model::left leg group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 76169631, "Model::body group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 73336514, "Model::right shose group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 79045892, "Model::left shouse group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 78915118, "Model::shouse group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 72578323, "Model::eyes group", "Null" {
+		Version: 232
+		Properties70:  {
+			P: "RotationActive", "bool", "", "",1
+			P: "InheritType", "enum", "", "",1
+			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0
+			P: "RotationPivot", "Vector3D", "Vector", "",0,0,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,0,0
+			P: "RotationOrder", "enum", "", "",0
+		}
+		Shading: Y
+		Culling: "CullingOff"
+	}
+	Model: 78555993, "Model::Playerbody", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -283,7 +448,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Geometry: 79805921, "Geometry::Playerbody", "Mesh" {
+	Geometry: 75402914, "Geometry::Playerbody", "Mesh" {
 		Vertices: *24 {
 			a: 15.625,37.5,15.625,15.625,37.5,-15.625,15.625,12.5,15.625,15.625,12.5,-15.625,-15.625,37.5,15.625,-15.625,37.5,-15.625,-15.625,12.5,15.625,-15.625,12.5,-15.625
 		}
@@ -334,7 +499,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 70142366, "Model::player right shose", "Mesh" {
+	Model: 78449325, "Model::player right shose", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -349,7 +514,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Geometry: 78886690, "Geometry::player right shose", "Mesh" {
+	Geometry: 72384178, "Geometry::player right shose", "Mesh" {
 		Vertices: *72 {
 			a: 4.6875,31.25,9.375,4.6875,31.25,-9.375,-4.6875,31.25,9.375,-4.6875,31.25,-9.375,4.6875,18.75,9.375,4.6875,18.75,-9.375,-4.6875,18.75,9.375,-4.6875,18.75,-9.375,-6.25,21.875,9.375,-6.25,28.125,9.375,-6.25,21.875,-9.375,-6.25,28.125,-9.375,6.25,21.875,9.375,6.25,28.125,9.375,6.25,21.875,-9.375,6.25,28.125,-9.375,4.6875,21.875,-12.5,4.6875,28.125,-12.5,-4.6875,21.875,-12.5,-4.6875,28.125,-12.5,4.6875,21.875,12.5,4.6875,28.125,12.5,-4.6875,21.875,12.5,-4.6875,28.125,12.5
 		}
@@ -400,7 +565,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 70390944, "Model::player  right leg", "Mesh" {
+	Model: 76650317, "Model::player  right leg", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -415,7 +580,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Geometry: 70165524, "Geometry::player  right leg", "Mesh" {
+	Geometry: 78101948, "Geometry::player  right leg", "Mesh" {
 		Vertices: *24 {
 			a: 1.5625,28.125,3.125,1.5625,28.125,-3.125,1.5625,21.875,3.125,1.5625,21.875,-3.125,-1.5625,28.125,3.125,-1.5625,28.125,-3.125,-1.5625,21.875,3.125,-1.5625,21.875,-3.125
 		}
@@ -466,7 +631,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 72721517, "Model::player left leg", "Mesh" {
+	Model: 78282971, "Model::player left leg", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -481,7 +646,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Geometry: 71023374, "Geometry::player left leg", "Mesh" {
+	Geometry: 75450915, "Geometry::player left leg", "Mesh" {
 		Vertices: *24 {
 			a: 1.5625,28.125,3.125,1.5625,28.125,-3.125,1.5625,21.875,3.125,1.5625,21.875,-3.125,-1.5625,28.125,3.125,-1.5625,28.125,-3.125,-1.5625,21.875,3.125,-1.5625,21.875,-3.125
 		}
@@ -532,7 +697,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 73443311, "Model::player left shose", "Mesh" {
+	Model: 74546906, "Model::player left shose", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -547,7 +712,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Geometry: 76220744, "Geometry::player left shose", "Mesh" {
+	Geometry: 75284155, "Geometry::player left shose", "Mesh" {
 		Vertices: *72 {
 			a: 4.6875,31.25,9.375,4.6875,31.25,-9.375,-4.6875,31.25,9.375,-4.6875,31.25,-9.375,4.6875,18.75,9.375,4.6875,18.75,-9.375,-4.6875,18.75,9.375,-4.6875,18.75,-9.375,-6.25,21.875,9.375,-6.25,28.125,9.375,-6.25,21.875,-9.375,-6.25,28.125,-9.375,6.25,21.875,9.375,6.25,28.125,9.375,6.25,21.875,-9.375,6.25,28.125,-9.375,4.6875,21.875,-12.5,4.6875,28.125,-12.5,-4.6875,21.875,-12.5,-4.6875,28.125,-12.5,4.6875,21.875,12.5,4.6875,28.125,12.5,-4.6875,21.875,12.5,-4.6875,28.125,12.5
 		}
@@ -598,7 +763,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 74541218, "Model::mesh", "Mesh" {
+	Model: 75890582, "Model::player eyes", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -613,7 +778,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 	}
-	Geometry: 77897315, "Geometry::mesh", "Mesh" {
+	Geometry: 78798661, "Geometry::player eyes", "Mesh" {
 		Vertices: *24 {
 			a: 10.9375,29.6875,1.5625,10.9375,29.6875,-1.5625,10.9375,20.3125,1.5625,10.9375,20.3125,-1.5625,-10.9375,29.6875,1.5625,-10.9375,29.6875,-1.5625,-10.9375,20.3125,1.5625,-10.9375,20.3125,-1.5625
 		}
@@ -664,7 +829,7 @@ Objects:  {
 			}
 		}
 	}
-	Material: 78787596, "Material::texture", "" {
+	Material: 79325239, "Material::texture", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -675,7 +840,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Texture: 73801222, "Texture::texture", "" {
+	Texture: 75333385, "Texture::texture", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::texture"
@@ -687,7 +852,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Video: 70089134, "Video::texture", "Clip" {
+	Video: 75642237, "Video::texture", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "texture"
@@ -697,7 +862,7 @@ Objects:  {
 		RelativeFilename: ""
 		Content: "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABA0lEQVR4AeyXMQ6DMBAEgf//mTS4cYPXUU7OeGgQYpG52bEE1z14HM8xGL+f+JHm23NV56tqoVXXEcCqzVS9lwZUkV51HQ1YtZmq99KAKtKrrnOdg0cbYDB+zubbc1Vnt0D6rZ7mq5qcXUcDZslRntvOgL44AfREdrvWgN0a7+fVgJ7Ibtc//xdYHahbgPZtnxqnASkxWl4DaI2m82hASoyWxxvwVpgA3gjR78f/AjQgbgFao+k8GpASo+U1gNZoOo8GpMRoeQ2gNZrOowEpMVoeZ0BakABSYrS8BtAaTefRgJQYLa8BtEbTeTQgJUbLawCt0XQeDUiJ0fIa8O+Nfvv+HwAAAP//VRHoUgAAAAZJREFUAwCDY/CBjRxVyQAAAABJRU5ErkJggg=="
 	}
-	Material: 72430013, "Material::texture_1", "" {
+	Material: 72841000, "Material::texture_1", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -708,7 +873,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Texture: 76371207, "Texture::texture_1", "" {
+	Texture: 74572366, "Texture::texture_1", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::texture_1"
@@ -720,7 +885,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Video: 78407393, "Video::texture_1", "Clip" {
+	Video: 78834690, "Video::texture_1", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "texture"
@@ -730,7 +895,7 @@ Objects:  {
 		RelativeFilename: ""
 		Content: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABCElEQVR4AexVwQ2DMAxM8u6/HQIW6q8z9Mcnyl7tvwOwT+qrZClCamynoKhSIo4ctgn2BUzIiuGKgfAYY44EcHaBwwaAs12agxRwtH+3BDyNlJJPBKJem3iY59lJ0C7WEhfOj1v1vnVdVdVM05RLVBctnOF5uXs85BuK2EOo+R3A/mKfAXDOalsA26XZnIC0oNVv7gP0gLwBXTpX7j/4x6g49VdAkaQqpPkdkHoA/KoMGoPC63qt3orKqgE/OsNpWf6rD1DB6IwlyNR+9P8K8O/GPxwA51rAYQPAJTv7rXN/BdDP0dcBcK4AHDYAXLKz3zr3V8Ca8d7xQ4GhwFBgKDAUOFwBqXW/AQAA///BjeZEAAAABklEQVQDAIyf8kHA828ZAAAAAElFTkSuQmCC"
 	}
-	Material: 72508007, "Material::texture_2", "" {
+	Material: 74345560, "Material::texture_2", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -741,7 +906,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Texture: 77838902, "Texture::texture_2", "" {
+	Texture: 76853599, "Texture::texture_2", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::texture_2"
@@ -753,7 +918,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Video: 71570855, "Video::texture_2", "Clip" {
+	Video: 72531504, "Video::texture_2", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "texture"
@@ -763,7 +928,7 @@ Objects:  {
 		RelativeFilename: ""
 		Content: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcElEQVR4AeyQSw7AIAhEae9/55Y3kYWYSHBtwvATXoKvmX1DHmRVraFwACI/igAe30QeZORIhTty5OlqANZuowOgdXNmA8i9Vg2A+1AskqOotxHAdqB6BJD/oNqZ3gFMjW4BgHtRd1fzAJScugsw+wEAAP//Jh2tUQAAAAZJREFUAwAdYAwhvBpwXgAAAABJRU5ErkJggg=="
 	}
-	Material: 79691934, "Material::texture_3", "" {
+	Material: 77571293, "Material::texture_3", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -774,7 +939,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Texture: 70311967, "Texture::texture_3", "" {
+	Texture: 77369102, "Texture::texture_3", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::texture_3"
@@ -786,7 +951,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Video: 72768695, "Video::texture_3", "Clip" {
+	Video: 77321599, "Video::texture_3", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "texture"
@@ -796,7 +961,7 @@ Objects:  {
 		RelativeFilename: ""
 		Content: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABCElEQVR4AexVwQ2DMAxM8u6/HQIW6q8z9Mcnyl7tvwOwT+qrZClCamynoKhSIo4ctgn2BUzIiuGKgfAYY44EcHaBwwaAs12agxRwtH+3BDyNlJJPBKJem3iY59lJ0C7WEhfOj1v1vnVdVdVM05RLVBctnOF5uXs85BuK2EOo+R3A/mKfAXDOalsA26XZnIC0oNVv7gP0gLwBXTpX7j/4x6g49VdAkaQqpPkdkHoA/KoMGoPC63qt3orKqgE/OsNpWf6rD1DB6IwlyNR+9P8K8O/GPxwA51rAYQPAJTv7rXN/BdDP0dcBcK4AHDYAXLKz3zr3V8Ca8d7xQ4GhwFBgKDAUOFwBqXW/AQAA///BjeZEAAAABklEQVQDAIyf8kHA828ZAAAAAElFTkSuQmCC"
 	}
-	Material: 78823849, "Material::texture_4", "" {
+	Material: 72217695, "Material::texture_4", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -807,7 +972,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Texture: 71609321, "Texture::texture_4", "" {
+	Texture: 71865635, "Texture::texture_4", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::texture_4"
@@ -819,7 +984,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Video: 76907989, "Video::texture_4", "Clip" {
+	Video: 74048017, "Video::texture_4", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "texture"
@@ -829,7 +994,7 @@ Objects:  {
 		RelativeFilename: ""
 		Content: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcElEQVR4AeyQSw7AIAhEae9/55Y3kYWYSHBtwvATXoKvmX1DHmRVraFwACI/igAe30QeZORIhTty5OlqANZuowOgdXNmA8i9Vg2A+1AskqOotxHAdqB6BJD/oNqZ3gFMjW4BgHtRd1fzAJScugsw+wEAAP//Jh2tUQAAAAZJREFUAwAdYAwhvBpwXgAAAABJRU5ErkJggg=="
 	}
-	Material: 78098821, "Material::texture_5", "" {
+	Material: 77375697, "Material::texture_5", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -840,7 +1005,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	Texture: 73007448, "Texture::texture_5", "" {
+	Texture: 70608616, "Texture::texture_5", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::texture_5"
@@ -852,7 +1017,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Video: 73672858, "Video::texture_5", "Clip" {
+	Video: 76945386, "Video::texture_5", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "texture"
@@ -862,6 +1027,470 @@ Objects:  {
 		RelativeFilename: ""
 		Content: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAu0lEQVR4AexVsQ2EQAwLtP8DfPnDsAXzsQXDUDIA1BBHug7lHME1KFIMRRzL5xyiF5GjAm1bsTwjsw8YYLlNeBEDnTrwoO14RQzE1YkJGPBOhV6ReekdGOft8FCOr2+k4UEp8cIK5P/7XCIuF58wA+RYuQMknaOZgWXd5QqcxD1WPw3fzsM9+fq0JVCntWPAALvb8gU86gYGHhWMiqUBJNBkt+wqYIDlNuGlgUwgE8gEMoFM4P0J1H6hJwAAAP//WkWRsQAAAAZJREFUAwCcRU5BWIRp1AAAAABJRU5ErkJggg=="
 	}
+	AnimationStack: 74907832, "AnimStack::PlayerWalk", "" {
+		Properties70:  {
+			P: "LocalStop", "KTime", "Time", "",61581544000
+			P: "ReferenceStop", "KTime", "Time", "",61581544000
+		}
+	}
+	AnimationLayer: 73546777, "AnimLayer::PlayerWalk", "" {
+	}
+	AnimationCurveNode: 78584111, "AnimCurveNode::PlayerWalk.R", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 76518248, "AnimCurve::PlayerWalk.RX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,-17.5,-30,-17.5,0,15,22.486400604248047,15,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 77746015, "AnimCurve::PlayerWalk.RY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0.6468999981880188,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 79234391, "AnimCurve::PlayerWalk.RZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,2,-0.414900004863739,2,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurveNode: 78760979, "AnimCurveNode::PlayerWalk.P", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 74486942, "AnimCurve::PlayerWalk.PX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 70042110, "AnimCurve::PlayerWalk.PY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,2.1875,0,-2.5,-1.875,-1.25,-1.875,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 71502463, "AnimCurve::PlayerWalk.PZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,6.25,9.375,6.25,0,-4.6875,-7.5,-4.6875,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurveNode: 79659046, "AnimCurveNode::PlayerWalk.R", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 78472857, "AnimCurve::PlayerWalk.RX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,-7.5,-20,-7.5,0,12.5,17.5,12.5,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 75376189, "AnimCurve::PlayerWalk.RY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0.30000001192092896,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 71801605, "AnimCurve::PlayerWalk.RZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurveNode: 76177200, "AnimCurveNode::PlayerWalk.P", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 79925920, "AnimCurve::PlayerWalk.PX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 75508071, "AnimCurve::PlayerWalk.PY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,1.25,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 77880404, "AnimCurve::PlayerWalk.PZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,4.375,6.25,4.375,0,-3.125,-5,-3.125,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurveNode: 79260234, "AnimCurveNode::PlayerWalk.R", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 79715524, "AnimCurve::PlayerWalk.RX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,12.5,17.5,12.5,0,-7.5,-20,-7.5,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 70908558, "AnimCurve::PlayerWalk.RY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0.30000001192092896,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 73678694, "AnimCurve::PlayerWalk.RZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurveNode: 75213274, "AnimCurveNode::PlayerWalk.P", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 72929352, "AnimCurve::PlayerWalk.PX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,0,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 74094425, "AnimCurve::PlayerWalk.PY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,0,0,0,0,0,1.25,0,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationCurve: 79599286, "AnimCurve::PlayerWalk.PZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *9 {
+			a: 0,7697693184,15395386368,23093078016,30790772736,38488465408,46186156032,53883850752,61581545472
+		}
+		KeyValueFloat: *9 {
+			a: 0,-3.125,-5,-3.125,0,4.375,6.25,4.375,0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 9
+		}
+	}
+	AnimationStack: 76964980, "AnimStack::Idle", "" {
+		Properties70:  {
+			P: "LocalStop", "KTime", "Time", "",46186158000
+			P: "ReferenceStop", "KTime", "Time", "",46186158000
+		}
+	}
+	AnimationLayer: 78320037, "AnimLayer::Idle", "" {
+	}
+	AnimationCurveNode: 70869432, "AnimCurveNode::Idle.P", "" {
+		Properties70:  {
+			P: "d|X", "Number", "", "A",1
+			P: "d|Y", "Number", "", "A",1
+			P: "d|Z", "Number", "", "A",1
+		}
+	}
+	AnimationCurve: 76628485, "AnimCurve::Idle.PX", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *1 {
+			a: 0
+		}
+		KeyValueFloat: *1 {
+			a: 0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 1
+		}
+	}
+	AnimationCurve: 71403689, "AnimCurve::Idle.PY", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *1 {
+			a: 0
+		}
+		KeyValueFloat: *1 {
+			a: 0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 1
+		}
+	}
+	AnimationCurve: 76868983, "AnimCurve::Idle.PZ", "" {
+		Default: 0
+		KeyVer: 4008
+		KeyTime: *1 {
+			a: 0
+		}
+		KeyValueFloat: *1 {
+			a: 0
+		}
+		KeyAttrFlags: *1 {
+			a: 24836
+		}
+		KeyAttrDataFloat: *4 {
+			a: 0,0,255790911,0
+		}
+		KeyAttrRefCount: *1 {
+			a: 1
+		}
+	}
 }
 
 ; Object connections
@@ -869,95 +1498,233 @@ Objects:  {
 
 Connections:  {
 
-	;Model::Playerbody, Model::RootNode
-	C: "OO",73458298,0
+	;Model::Body, Model::RootNode
+	C: "OO",79153505,0
+
+	;Model::Leg group, Model::Body
+	C: "OO",70753442,79153505
+
+	;Model::right leg group, Model::Leg group
+	C: "OO",71122821,70753442
+
+	;Model::left leg group, Model::Leg group
+	C: "OO",71732264,70753442
+
+	;Model::body group, Model::Body
+	C: "OO",76169631,79153505
+
+	;Model::right shose group, Model::shouse group
+	C: "OO",73336514,78915118
+
+	;Model::left shouse group, Model::shouse group
+	C: "OO",79045892,78915118
+
+	;Model::shouse group, Model::Body
+	C: "OO",78915118,79153505
+
+	;Model::eyes group, Model::Body
+	C: "OO",72578323,79153505
+
+	;Model::Playerbody, Model::body group
+	C: "OO",78555993,76169631
 
 	;Geometry::Playerbody, Model::Playerbody
-	C: "OO",79805921,73458298
+	C: "OO",75402914,78555993
 
 	;Material::texture, Model::Playerbody
-	C: "OO",78787596,73458298
+	C: "OO",79325239,78555993
 
-	;Model::player right shose, Model::RootNode
-	C: "OO",70142366,0
+	;Model::player right shose, Model::right shose group
+	C: "OO",78449325,73336514
 
 	;Geometry::player right shose, Model::player right shose
-	C: "OO",78886690,70142366
+	C: "OO",72384178,78449325
 
 	;Material::texture_1, Model::player right shose
-	C: "OO",72430013,70142366
+	C: "OO",72841000,78449325
 
-	;Model::player  right leg, Model::RootNode
-	C: "OO",70390944,0
+	;Model::player  right leg, Model::right leg group
+	C: "OO",76650317,71122821
 
 	;Geometry::player  right leg, Model::player  right leg
-	C: "OO",70165524,70390944
+	C: "OO",78101948,76650317
 
 	;Material::texture_2, Model::player  right leg
-	C: "OO",72508007,70390944
+	C: "OO",74345560,76650317
 
-	;Model::player left leg, Model::RootNode
-	C: "OO",72721517,0
+	;Model::player left leg, Model::left leg group
+	C: "OO",78282971,71732264
 
 	;Geometry::player left leg, Model::player left leg
-	C: "OO",71023374,72721517
+	C: "OO",75450915,78282971
 
 	;Material::texture_2, Model::player left leg
-	C: "OO",72508007,72721517
+	C: "OO",74345560,78282971
 
-	;Model::player left shose, Model::RootNode
-	C: "OO",73443311,0
+	;Model::player left shose, Model::left shouse group
+	C: "OO",74546906,79045892
 
 	;Geometry::player left shose, Model::player left shose
-	C: "OO",76220744,73443311
+	C: "OO",75284155,74546906
 
 	;Material::texture_1, Model::player left shose
-	C: "OO",72430013,73443311
+	C: "OO",72841000,74546906
 
-	;Model::mesh, Model::RootNode
-	C: "OO",74541218,0
+	;Model::player eyes, Model::eyes group
+	C: "OO",75890582,72578323
 
-	;Geometry::mesh, Model::mesh
-	C: "OO",77897315,74541218
+	;Geometry::player eyes, Model::player eyes
+	C: "OO",78798661,75890582
 
-	;Material::texture_3, Model::mesh
-	C: "OO",78098821,74541218
+	;Material::texture_3, Model::player eyes
+	C: "OO",77375697,75890582
 
 	;Texture::texture, Material::texture
-	C: "OP",73801222,78787596, "DiffuseColor"
+	C: "OP",75333385,79325239, "DiffuseColor"
 
 	;Video::texture, Texture::texture
-	C: "OO",70089134,73801222
+	C: "OO",75642237,75333385
 
 	;Texture::texture_1, Material::texture_1
-	C: "OP",76371207,72430013, "DiffuseColor"
+	C: "OP",74572366,72841000, "DiffuseColor"
 
 	;Video::texture_1, Texture::texture_1
-	C: "OO",78407393,76371207
+	C: "OO",78834690,74572366
 
 	;Texture::texture_2, Material::texture_2
-	C: "OP",77838902,72508007, "DiffuseColor"
+	C: "OP",76853599,74345560, "DiffuseColor"
 
 	;Video::texture_2, Texture::texture_2
-	C: "OO",71570855,77838902
+	C: "OO",72531504,76853599
 
 	;Texture::texture_3, Material::texture_3
-	C: "OP",70311967,79691934, "DiffuseColor"
+	C: "OP",77369102,77571293, "DiffuseColor"
 
 	;Video::texture_3, Texture::texture_3
-	C: "OO",72768695,70311967
+	C: "OO",77321599,77369102
 
 	;Texture::texture_4, Material::texture_4
-	C: "OP",71609321,78823849, "DiffuseColor"
+	C: "OP",71865635,72217695, "DiffuseColor"
 
 	;Video::texture_4, Texture::texture_4
-	C: "OO",76907989,71609321
+	C: "OO",74048017,71865635
 
 	;Texture::texture_5, Material::texture_5
-	C: "OP",73007448,78098821, "DiffuseColor"
+	C: "OP",70608616,77375697, "DiffuseColor"
 
 	;Video::texture_5, Texture::texture_5
-	C: "OO",73672858,73007448
+	C: "OO",76945386,70608616
+
+	;AnimLayer::PlayerWalk, AnimStack::PlayerWalk
+	C: "OO",73546777,74907832
+
+	;AnimCurveNode::PlayerWalk.R, Model::right leg group
+	C: "OP",78584111,71122821, "Lcl Rotation"
+
+	;AnimCurveNode::PlayerWalk.R, AnimLayer::PlayerWalk
+	C: "OO",78584111,73546777
+
+	;AnimCurve::PlayerWalk.RX, AnimCurveNode::PlayerWalk.R
+	C: "OP",76518248,78584111, "d|X"
+
+	;AnimCurve::PlayerWalk.RY, AnimCurveNode::PlayerWalk.R
+	C: "OP",77746015,78584111, "d|Y"
+
+	;AnimCurve::PlayerWalk.RZ, AnimCurveNode::PlayerWalk.R
+	C: "OP",79234391,78584111, "d|Z"
+
+	;AnimCurveNode::PlayerWalk.P, Model::right leg group
+	C: "OP",78760979,71122821, "Lcl Translation"
+
+	;AnimCurveNode::PlayerWalk.P, AnimLayer::PlayerWalk
+	C: "OO",78760979,73546777
+
+	;AnimCurve::PlayerWalk.PX, AnimCurveNode::PlayerWalk.P
+	C: "OP",74486942,78760979, "d|X"
+
+	;AnimCurve::PlayerWalk.PY, AnimCurveNode::PlayerWalk.P
+	C: "OP",70042110,78760979, "d|Y"
+
+	;AnimCurve::PlayerWalk.PZ, AnimCurveNode::PlayerWalk.P
+	C: "OP",71502463,78760979, "d|Z"
+
+	;AnimCurveNode::PlayerWalk.R, Model::right shose group
+	C: "OP",79659046,73336514, "Lcl Rotation"
+
+	;AnimCurveNode::PlayerWalk.R, AnimLayer::PlayerWalk
+	C: "OO",79659046,73546777
+
+	;AnimCurve::PlayerWalk.RX, AnimCurveNode::PlayerWalk.R
+	C: "OP",78472857,79659046, "d|X"
+
+	;AnimCurve::PlayerWalk.RY, AnimCurveNode::PlayerWalk.R
+	C: "OP",75376189,79659046, "d|Y"
+
+	;AnimCurve::PlayerWalk.RZ, AnimCurveNode::PlayerWalk.R
+	C: "OP",71801605,79659046, "d|Z"
+
+	;AnimCurveNode::PlayerWalk.P, Model::right shose group
+	C: "OP",76177200,73336514, "Lcl Translation"
+
+	;AnimCurveNode::PlayerWalk.P, AnimLayer::PlayerWalk
+	C: "OO",76177200,73546777
+
+	;AnimCurve::PlayerWalk.PX, AnimCurveNode::PlayerWalk.P
+	C: "OP",79925920,76177200, "d|X"
+
+	;AnimCurve::PlayerWalk.PY, AnimCurveNode::PlayerWalk.P
+	C: "OP",75508071,76177200, "d|Y"
+
+	;AnimCurve::PlayerWalk.PZ, AnimCurveNode::PlayerWalk.P
+	C: "OP",77880404,76177200, "d|Z"
+
+	;AnimCurveNode::PlayerWalk.R, Model::left shouse group
+	C: "OP",79260234,79045892, "Lcl Rotation"
+
+	;AnimCurveNode::PlayerWalk.R, AnimLayer::PlayerWalk
+	C: "OO",79260234,73546777
+
+	;AnimCurve::PlayerWalk.RX, AnimCurveNode::PlayerWalk.R
+	C: "OP",79715524,79260234, "d|X"
+
+	;AnimCurve::PlayerWalk.RY, AnimCurveNode::PlayerWalk.R
+	C: "OP",70908558,79260234, "d|Y"
+
+	;AnimCurve::PlayerWalk.RZ, AnimCurveNode::PlayerWalk.R
+	C: "OP",73678694,79260234, "d|Z"
+
+	;AnimCurveNode::PlayerWalk.P, Model::left shouse group
+	C: "OP",75213274,79045892, "Lcl Translation"
+
+	;AnimCurveNode::PlayerWalk.P, AnimLayer::PlayerWalk
+	C: "OO",75213274,73546777
+
+	;AnimCurve::PlayerWalk.PX, AnimCurveNode::PlayerWalk.P
+	C: "OP",72929352,75213274, "d|X"
+
+	;AnimCurve::PlayerWalk.PY, AnimCurveNode::PlayerWalk.P
+	C: "OP",74094425,75213274, "d|Y"
+
+	;AnimCurve::PlayerWalk.PZ, AnimCurveNode::PlayerWalk.P
+	C: "OP",79599286,75213274, "d|Z"
+
+	;AnimLayer::Idle, AnimStack::Idle
+	C: "OO",78320037,76964980
+
+	;AnimCurveNode::Idle.P, Model::left shouse group
+	C: "OP",70869432,79045892, "Lcl Translation"
+
+	;AnimCurveNode::Idle.P, AnimLayer::Idle
+	C: "OO",70869432,78320037
+
+	;AnimCurve::Idle.PX, AnimCurveNode::Idle.P
+	C: "OP",76628485,70869432, "d|X"
+
+	;AnimCurve::Idle.PY, AnimCurveNode::Idle.P
+	C: "OP",71403689,70869432, "d|Y"
+
+	;AnimCurve::Idle.PZ, AnimCurveNode::Idle.P
+	C: "OP",76868983,70869432, "d|Z"
 }
 
 ; Takes section
@@ -965,4 +1732,14 @@ Connections:  {
 
 Takes:  {
 	Current: ""
+	Take: "PlayerWalk" {
+		FileName: "PlayerWalk.tak"
+		LocalTime: 0,61581544000
+		ReferenceTime: 0,61581544000
+	}
+	Take: "Idle" {
+		FileName: "Idle.tak"
+		LocalTime: 0,46186158000
+		ReferenceTime: 0,46186158000
+	}
 }

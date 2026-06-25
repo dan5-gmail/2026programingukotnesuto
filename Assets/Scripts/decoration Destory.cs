@@ -1,9 +1,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(MeshCollider))]
 public class DecorationDestroy : MonoBehaviour
 {
     [Header("生成物")]
+    [Tooltip("ElementPrefabアタッチ")]
     [SerializeField]
     private GameObject elementPrefab;
 

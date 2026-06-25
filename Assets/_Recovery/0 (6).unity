@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
   moveSpeed: 3.5
-  jumpPower: 4.5
+  jumpPower: 4
   Gravity: 0.9
 --- !u!54 &3803398
 Rigidbody:

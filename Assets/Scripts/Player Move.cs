@@ -18,16 +18,34 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private float Gravity;
 
+    [Header("アニメーション")]
+    private Animator walk;
 
     private Rigidbody rb;
     private bool isGrounded;
 
+    private Animator animator;
+
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true; //回転しない,固定
+        // rb = GetComponent<Rigidbody>();
+        // rb.freezeRotation = true; //回転しない,固定
 
-        defaultmoveSpeed = moveSpeed;  //初期速度記憶
+        // defaultmoveSpeed = moveSpeed;  //初期速度記憶
+
+        // walk = GetComponent<Animator>();
+
+        rb = GetComponent<Rigidbody>();
+
+        animator = GetComponent<Animator>();
+
+        Debug.Log(animator);
+
+        rb.freezeRotation = true;
+
+        defaultmoveSpeed = moveSpeed;
+
+
     }
 
 
@@ -45,6 +63,7 @@ public class PlayerMove : MonoBehaviour
             transform.position.y,
             0
         );
+
     }
 
     void FixedUpdate()
@@ -74,6 +93,9 @@ public class PlayerMove : MonoBehaviour
         rb.linearVelocity = new Vector3(smoothX,
         rb.linearVelocity.y,
         0);
+
+
+        animator.SetBool("PlayerWalk", moveX != 0);
     }
 
 

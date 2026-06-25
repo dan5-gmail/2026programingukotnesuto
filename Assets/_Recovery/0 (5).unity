@@ -170,8 +170,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.3, y: 0.4, z: 0.3}
-  m_Center: {x: 0, y: 0.2, z: 0}
+  m_Size: {x: 0.3, y: 0.35, z: 0.3}
+  m_Center: {x: 0, y: 0.22, z: 0}
 --- !u!114 &3803397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,9 +184,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e911c0e1fbd6434583b986aa186a5b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
-  moveSpeed: 3.5
-  jumpPower: 4.5
-  Gravity: 0.9
+  moveSpeed: 4
+  jumpPower: 5
+  Gravity: 1
 --- !u!54 &3803398
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2146,7 +2146,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 5, y: 5.4, z: 6}
-  m_Center: {x: 0, y: 0, z: 0.08}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1506057053 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2883608572424811287, guid: 13c35f8c5303972478b2ae5916bb7122, type: 3}
