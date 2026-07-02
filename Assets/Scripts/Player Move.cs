@@ -96,6 +96,19 @@ public class PlayerMove : MonoBehaviour
 
 
         animator.SetBool("PlayerWalk", moveX != 0);
+
+
+        // 向き変更
+        if (moveX > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 92, 0);
+        }
+        else if (moveX < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, -88, 0);
+        }
+
+
     }
 
 
