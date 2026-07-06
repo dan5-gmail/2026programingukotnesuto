@@ -4,6 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(MeshCollider))]
 public class DecorationDestroy : MonoBehaviour
 {
+
+    public enum DecorationType
+    {
+        Tree,
+        Leaf,
+        Stone
+    }
+    [Header("装飾物の種類選択")]
+    public DecorationType decorationType;
+
     [Header("生成物")]
     [Tooltip("ElementPrefabアタッチ")]
     [SerializeField]
@@ -12,7 +22,6 @@ public class DecorationDestroy : MonoBehaviour
     [Header("上方向力")]
     [SerializeField]
     private float upForce;
-
 
     private BoxCollider bc;
 
@@ -51,6 +60,22 @@ public class DecorationDestroy : MonoBehaviour
 
         GameObject element = Instantiate(elementPrefab, spawnPos, Quaternion.identity);
 
+        Element elementScript = element.GetComponent<Element>();
+
+        switch (decorationType)
+        {
+            case DecorationType.Tree:
+                elementScript.SetElement(Element.ElementType.Wood);
+                break;
+
+            case DecorationType.Leaf:
+                elementScript.SetElement(Element.ElementType.Leaf);
+                break;
+
+            case DecorationType.Stone:
+                elementScript.SetElement(Element.ElementType.Leaf);
+                break;
+        }
         Rigidbody rb = element.GetComponent<Rigidbody>();
 
         if (rb != null)

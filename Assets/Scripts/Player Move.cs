@@ -21,6 +21,8 @@ public class PlayerMove : MonoBehaviour
     [Header("アニメーション")]
     private Animator walk;
 
+    private Animator jump;
+
     private Rigidbody rb;
     private bool isGrounded;
 
@@ -55,6 +57,8 @@ public class PlayerMove : MonoBehaviour
         Playermove();
 
         PlayerJump();
+
+        animator.SetBool("PlayerJump", !isGrounded);
 
 
         // Z軸固定
