@@ -15,10 +15,10 @@ public class Element : MonoBehaviour
 
     [Header("ボトル回収")]
     [SerializeField]
-    private float collectRange = 5f;
+    private float collectRange = 0.02f;
 
     [SerializeField]
-    private float collectSpeed = 5f;
+    private float collectSpeed = 0.02f;
 
     private Bottle bottle;
 
