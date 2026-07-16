@@ -315,9 +315,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DecorationDestroy
   decorationType: 0
   elementPrefab: {fileID: 7385605110427883945}
-  upForce: 0.7
-  minDrop: 1
-  maxDrop: 2
+  upForce: 0
+  minDrop: 0
+  maxDrop: 0
 --- !u!64 &143449378
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -918,71 +918,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3803397}
   m_SourcePrefab: {fileID: 100100000, guid: 7dc533acb7210c24abc801243bdc16b1, type: 3}
---- !u!1 &667025372 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -9102117403313577056, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-  m_PrefabInstance: {fileID: 1568965007}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &667025376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667025372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b65e7853312fc4442926310e656f1d52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DecorationDestroy
-  decorationType: 0
-  elementPrefab: {fileID: 7385605110427883945}
-  upForce: 0
-  minDrop: 1
-  maxDrop: 3
---- !u!64 &667025377
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667025372}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8908299743826163017, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
---- !u!65 &667025378
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667025372}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1.0625, z: 1}
-  m_Center: {x: 0.00000047683716, y: 0, z: 0}
 --- !u!1001 &780731579
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2454,26 +2389,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5, y: 5.4, z: 6}
   m_Center: {x: 0, y: 0, z: 0.08}
---- !u!1 &1494140532 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3538388461515592958, guid: ffcac0054496012489eba77ac7db7689, type: 3}
-  m_PrefabInstance: {fileID: 7999646077876525843}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1494140533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1494140532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9960baf879b84b44197aaf264b90942c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Bottle
-  wood: 0
-  leaf: 0
-  stone: 0
 --- !u!1 &1506057053 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2883608572424811287, guid: 13c35f8c5303972478b2ae5916bb7122, type: 3}
@@ -2551,13 +2466,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 625376451}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b65e7853312fc4442926310e656f1d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DecorationDestroy
   decorationType: 0
-  elementPrefab: {fileID: 7385605110427883945}
+  elementPrefab: {fileID: 0}
   upForce: 0
   minDrop: 0
   maxDrop: 0
@@ -2689,24 +2604,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1566523995}
-    - targetCorrespondingSourceObject: {fileID: -8553417584757162366, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1675252662}
-    - targetCorrespondingSourceObject: {fileID: -8553417584757162366, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1675252661}
-    - targetCorrespondingSourceObject: {fileID: -8553417584757162366, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1675252660}
-    - targetCorrespondingSourceObject: {fileID: -9102117403313577056, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 667025378}
-    - targetCorrespondingSourceObject: {fileID: -9102117403313577056, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 667025377}
-    - targetCorrespondingSourceObject: {fileID: -9102117403313577056, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 667025376}
   m_SourcePrefab: {fileID: 100100000, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
 --- !u!4 &1582349886 stripped
 Transform:
@@ -2790,71 +2687,6 @@ Transform:
   - {fileID: 1098531506}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1675252656 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -8553417584757162366, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
-  m_PrefabInstance: {fileID: 1568965007}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1675252660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1675252656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b65e7853312fc4442926310e656f1d52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DecorationDestroy
-  decorationType: 1
-  elementPrefab: {fileID: 7385605110427883945}
-  upForce: 0
-  minDrop: 1
-  maxDrop: 2
---- !u!64 &1675252661
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1675252656}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4632596647708219413, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
---- !u!65 &1675252662
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1675252656}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.25, y: 1.25, z: 0.25}
-  m_Center: {x: 0.00000047683716, y: 0.25, z: 0}
 --- !u!1 &1722593546 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
@@ -3674,9 +3506,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DecorationDestroy
   decorationType: 1
   elementPrefab: {fileID: 7385605110427883945}
-  upForce: 0.7
-  minDrop: 1
-  maxDrop: 2
+  upForce: 0
+  minDrop: 0
+  maxDrop: 0
 --- !u!64 &2078543431
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3906,10 +3738,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3538388461515592958, guid: ffcac0054496012489eba77ac7db7689, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1494140533}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffcac0054496012489eba77ac7db7689, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

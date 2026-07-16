@@ -23,6 +23,12 @@ public class DecorationDestroy : MonoBehaviour
     [SerializeField]
     private float upForce;
 
+    [SerializeField]
+    private int minDrop; //アイテムドロップ数最小数値
+
+    [SerializeField]
+    private int maxDrop; //アイテムドロップ数最大数値
+
     private BoxCollider bc;
 
     private void Start()
@@ -56,31 +62,36 @@ public class DecorationDestroy : MonoBehaviour
 
     private void spawnElement()
     {
-        Vector3 spawnPos = transform.position + Vector3.up * 0.5f;
+        int dropCount = Random.Range(minDrop, maxDrop + 1);
 
-        GameObject element = Instantiate(elementPrefab, spawnPos, Quaternion.identity);
-
-        Element elementScript = element.GetComponent<Element>();
-
-        switch (decorationType)
+        for (int i = 0; i < dropCount; i++)
         {
-            case DecorationType.Tree:
-                elementScript.SetElement(Element.ElementType.Wood);
-                break;
+            Vector3 spawnPos = transform.position + Vector3.up * 0.5f;
 
-            case DecorationType.Leaf:
-                elementScript.SetElement(Element.ElementType.Leaf);
-                break;
+            GameObject element = Instantiate(elementPrefab, spawnPos, Quaternion.identity);
 
-            case DecorationType.Stone:
-                elementScript.SetElement(Element.ElementType.Leaf);
-                break;
-        }
-        Rigidbody rb = element.GetComponent<Rigidbody>();
+            Element elementScript = element.GetComponent<Element>();
 
-        if (rb != null)
-        {
-            rb.AddForce(Vector3.up * upForce, ForceMode.Impulse);
+            switch (decorationType)
+            {
+                case DecorationType.Tree:
+                    elementScript.SetElement(Element.ElementType.Wood);
+                    break;
+
+                case DecorationType.Leaf:
+                    elementScript.SetElement(Element.ElementType.Leaf);
+                    break;
+
+                case DecorationType.Stone:
+                    elementScript.SetElement(Element.ElementType.Leaf);
+                    break;
+            }
+            Rigidbody rb = element.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                rb.AddForce(Vector3.up * upForce, ForceMode.Impulse);
+            }
         }
     }
 }

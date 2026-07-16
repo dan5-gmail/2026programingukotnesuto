@@ -1,27 +1,26 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
-[RequireComponent(typeof(Rigidbody))]
 public class Bottle : MonoBehaviour
 {
+    public int wood;
+    public int leaf;
+    public int stone;
 
-    [Header("回収時")]
-    public int element;
-
-
-
-    private BoxCollider bc;
-    private Rigidbody rb;
-
-    void Start()
+    public void AddElement(Element.ElementType type)
     {
-        bc = GetComponent<BoxCollider>();
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-    }
+        switch (type)
+        {
+            case Element.ElementType.Wood:
+                wood++;
+                break;
 
-    void Update()
-    {
+            case Element.ElementType.Leaf:
+                leaf++;
+                break;
 
+            case Element.ElementType.Stone:
+                stone++;
+                break;
+        }
     }
 }
