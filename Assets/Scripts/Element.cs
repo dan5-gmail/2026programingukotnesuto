@@ -15,7 +15,7 @@ public class Element : MonoBehaviour
 
     [Header("ボトル回収")]
     [SerializeField]
-    private float collectRange = 0.02f;
+    private float collectRange = 0.04f;
 
     [SerializeField]
     private float collectSpeed = 0.02f;
@@ -61,7 +61,7 @@ public class Element : MonoBehaviour
             );
 
             // 近づいたら回収
-            if (distance < 0.04f)
+            if (distance < 0.03f)
             {
                 bottle.AddElement(elementType);
                 Destroy(gameObject);
