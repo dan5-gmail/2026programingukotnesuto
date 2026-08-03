@@ -31,6 +31,7 @@ public class Bottle : MonoBehaviour
                 Debug.Log("石+1");
                 break;
         }
+        GameManager.Instance.ItemCollected(type, 1);
 
         // +1表示
         if (PlusonePrefab != null)
