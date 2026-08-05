@@ -107,6 +107,16 @@ public class Element : MonoBehaviour
                     rend.material.SetColor("_EmissionColor", woodColor * 1.5f);
                     break;
                 }
+            case ElementType.Stone:
+                {
+                    Color stoneColor = new Color(0.5f, 0.5f, 0.5f);
+
+                    rend.material.color = stoneColor;
+
+                    // 発光
+                    rend.material.SetColor("_EmissionColor", stoneColor * 1.5f);
+                    break;
+                }
         }
     }
 
