@@ -83,7 +83,7 @@ public class DecorationDestroy : MonoBehaviour
                     break;
 
                 case DecorationType.Stone:
-                    elementScript.SetElement(Element.ElementType.Leaf);
+                    elementScript.SetElement(Element.ElementType.Stone);
                     break;
             }
             Rigidbody rb = element.GetComponent<Rigidbody>();
