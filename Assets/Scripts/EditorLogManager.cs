@@ -33,27 +33,35 @@ public class EditorLogManager : MonoBehaviour
     public void AddLog(Element.ElementType type, int amount)
     {
         string itemName = "";
+        string itemColor = "";
 
         switch (type)
         {
             case Element.ElementType.Wood:
-                itemName = "木材";
+                itemName = "Wood";
+                itemColor = "#8B4513"; // 茶色
                 break;
 
             case Element.ElementType.Leaf:
-                itemName = "葉っぱ";
+                itemName = "Leaves";
+                itemColor = "#32CD32"; // 緑色
                 break;
 
             case Element.ElementType.Stone:
-                itemName = "石";
+                itemName = "Stone";
+                itemColor = "#AAAAAA"; // 灰色
                 break;
 
             default:
-                itemName = "不明";
+                itemName = "Unknown";
+                itemColor = "#FFFFFF";
                 break;
         }
 
-        string message = $"! {itemName}を{amount}つストックしました";
+        // ! = 黄色
+        // アイテム名 = 種類ごとの色
+        string message =
+            $"<color=#FFD700>!</color> {amount} <color={itemColor}>{itemName}</color> added.";
 
         logs.Add(message);
 
@@ -62,7 +70,7 @@ public class EditorLogManager : MonoBehaviour
             logs.RemoveAt(0);
         }
 
-        // 最新ログへスクロール
+        // 最新ログへ自動スクロール
         topIndex = Mathf.Max(0, logs.Count - visibleLines);
 
         RefreshLog();

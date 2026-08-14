@@ -2,43 +2,107 @@ using UnityEngine;
 
 public class InventoryPanel : MonoBehaviour
 {
-    public RectTransform panel;
+    [Header("移動設定")]
+    [SerializeField] private float startX = 10f;
+    [SerializeField] private float endX = 1f;
 
-    [Header("移動の位置設定")]
-    [SerializeField]
-    private float startX = 650f;
-    [SerializeField]
-    private float endX = 0f;
+    [Header("アニメーション")]
+    [SerializeField] private float speed = 10f;
 
-    [Header("アニメーション設定")]
-    [SerializeField]
-    private float speed = 10f;
+    [Header("インベントリ画面")]
+    [SerializeField] private GameObject bottlePanel;
+    [SerializeField] private GameObject craftPanel;
 
     private bool isOpen = false;
-    private Vector2 target;
+
+    private Vector3 targetPosition;
     private float fixedY;
+    private float fixedZ;
 
     private void Start()
     {
-        fixedY = panel.anchoredPosition.y;
-        target = new Vector2(startX, fixedY);
-        panel.anchoredPosition = target;
+        fixedY = transform.localPosition.y;
+        fixedZ = transform.localPosition.z;
+
+        // 最初は右側へ隠す
+        targetPosition = new Vector3(
+            startX,
+            fixedY,
+            fixedZ
+        );
+
+        transform.localPosition = targetPosition;
+
+        // 最初はBottle画面
+        ShowBottlePanel();
     }
 
     private void Update()
     {
-        panel.anchoredPosition = Vector2.Lerp(
-            panel.anchoredPosition,
-            target,
+        transform.localPosition = Vector3.Lerp(
+            transform.localPosition,
+            targetPosition,
             Time.deltaTime * speed
         );
     }
 
+    // ボトルボタンから呼ぶ
     public void TogglePanel()
     {
         isOpen = !isOpen;
 
+        if (isOpen)
+        {
+            // InventoryPanelを開くたびにBottle画面から開始
+            ShowBottlePanel();
+        }
+
         float targetX = isOpen ? endX : startX;
-        target = new Vector2(targetX, fixedY);
+
+        targetPosition = new Vector3(
+            targetX,
+            fixedY,
+            fixedZ
+        );
+    }
+
+    // Bottle画面を表示
+    public void ShowBottlePanel()
+    {
+        if (bottlePanel != null)
+        {
+            bottlePanel.SetActive(true);
+        }
+
+        if (craftPanel != null)
+        {
+            craftPanel.SetActive(false);
+        }
+    }
+
+    // Craft画面を表示
+    public void ShowCraftPanel()
+    {
+        if (bottlePanel != null)
+        {
+            bottlePanel.SetActive(false);
+        }
+
+        if (craftPanel != null)
+        {
+            craftPanel.SetActive(true);
+        }
+    }
+
+    // BackButtonから呼ぶ
+    public void ClosePanel()
+    {
+        isOpen = false;
+
+        targetPosition = new Vector3(
+            startX,
+            fixedY,
+            fixedZ
+        );
     }
 }
