@@ -46,14 +46,16 @@ public class InventoryPanel : MonoBehaviour
         );
     }
 
-    // ボトルボタンから呼ぶ
+    // =========================================
+    // インベントリを開く / 閉じる
+    // =========================================
     public void TogglePanel()
     {
         isOpen = !isOpen;
 
         if (isOpen)
         {
-            // InventoryPanelを開くたびにBottle画面から開始
+            // インベントリを開くたびにBottle画面から開始
             ShowBottlePanel();
         }
 
@@ -66,7 +68,9 @@ public class InventoryPanel : MonoBehaviour
         );
     }
 
+    // =========================================
     // Bottle画面を表示
+    // =========================================
     public void ShowBottlePanel()
     {
         if (bottlePanel != null)
@@ -80,7 +84,9 @@ public class InventoryPanel : MonoBehaviour
         }
     }
 
+    // =========================================
     // Craft画面を表示
+    // =========================================
     public void ShowCraftPanel()
     {
         if (bottlePanel != null)
@@ -94,7 +100,51 @@ public class InventoryPanel : MonoBehaviour
         }
     }
 
-    // BackButtonから呼ぶ
+    // =========================================
+    // Craftボタンから呼ぶ
+    // =========================================
+    public void OpenCraft()
+    {
+        // InventoryPanel自体が閉じていたら開く
+        if (!isOpen)
+        {
+            isOpen = true;
+
+            targetPosition = new Vector3(
+                endX,
+                fixedY,
+                fixedZ
+            );
+        }
+
+        // Craft画面を表示
+        ShowCraftPanel();
+    }
+
+    // =========================================
+    // Bottleボタンから呼ぶ
+    // =========================================
+    public void OpenBottle()
+    {
+        // InventoryPanel自体が閉じていたら開く
+        if (!isOpen)
+        {
+            isOpen = true;
+
+            targetPosition = new Vector3(
+                endX,
+                fixedY,
+                fixedZ
+            );
+        }
+
+        // Bottle画面を表示
+        ShowBottlePanel();
+    }
+
+    // =========================================
+    // ×ボタンから呼ぶ
+    // =========================================
     public void ClosePanel()
     {
         isOpen = false;
