@@ -5,22 +5,18 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [Header("Manager")]
-    // [SerializeField]
-    // private InventoryManager inventoryManager;
+    [SerializeField] private EditorLogManager editorlogManager;
+    [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private CraftManager craftManager;
 
-
-    [SerializeField]
-    private EditorLogManager editorlogManager;
-
-    // [SerializeField]
-    // private EffectManager effectManager;
+    [Header("Bottle")]
+    [SerializeField] private Bottle bottle;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-
         }
         else
         {
@@ -28,20 +24,70 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    // ================================
-    // アイテム取得
-    // ================================
-    public void ItemCollected(Element.ElementType type, int amout)
+    // =========================================
+    // Bottle取得
+    // =========================================
+    public Bottle GetBottle()
     {
-        Debug.Log("AddLogaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        // インベントリ追加
-        // inventoryManager.AddElement(type, amout);
+        return bottle;
+    }
 
-        // Log表示
-        editorlogManager.AddLog(type, amout);
+    // =========================================
+    // 木の杭を追加
+    // =========================================
+    public void AddWoodenStake(int amount)
+    {
+        if (inventoryManager == null)
+        {
+            return;
+        }
 
-        // +1
-        //    effectManager.ShowPlusOne(type,amout); 
+        inventoryManager.AddWoodenStake(amount);
+    }
+
+    // =========================================
+    // アイテム取得
+    // =========================================
+    public void ItemCollected(
+        Element.ElementType type,
+        int amount
+    )
+    {
+        editorlogManager.AddLog(type, amount);
+    }
+
+    // =========================================
+    // クラフト成功ログ
+    // =========================================
+    public void CraftedItem(
+        string itemName,
+        int amount
+    )
+    {
+        editorlogManager.AddCraftLog(
+            itemName,
+            amount
+        );
+    }
+
+    // =========================================
+    // クラフト失敗ログ
+    // =========================================
+    public void CraftErrorLog(string message)
+    {
+        editorlogManager.AddErrorLog(message);
+    }
+
+    // =========================================
+    // 木の杭をクラフト
+    // =========================================
+    public void CraftWoodenStake()
+    {
+        if (craftManager == null)
+        {
+            return;
+        }
+
+        craftManager.CraftWoodenStake();
     }
 }

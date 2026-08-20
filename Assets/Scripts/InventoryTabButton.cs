@@ -5,19 +5,27 @@ public class InventoryTabButton : MonoBehaviour
     public enum TabType
     {
         Bottle,
-        Craft
+        Craft,
+        Item
     }
 
     [Header("ボタンの種類")]
-    [SerializeField] private TabType tabType;
+    [SerializeField]
+    private TabType tabType;
 
     [Header("表示するパネル")]
-    [SerializeField] private GameObject bottlePanel;
-    [SerializeField] private GameObject craftPanel;
+    [SerializeField]
+    private GameObject bottlePanel;
+    [SerializeField]
+    private GameObject craftPanel;
+    [SerializeField]
+    private GameObject itemPanel;
 
     [Header("明るさ")]
-    [SerializeField] private float normalBrightness = 1.0f;
-    [SerializeField] private float hoverBrightness = 1.25f;
+    [SerializeField]
+    private float normalBrightness = 1.0f;
+    [SerializeField]
+    private float hoverBrightness = 1.25f;
 
     private Renderer[] renderers;
     private Color[] originalColors;
@@ -51,6 +59,9 @@ public class InventoryTabButton : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // =========================================
+        // Bottle
+        // =========================================
         if (tabType == TabType.Bottle)
         {
             if (bottlePanel != null)
@@ -62,7 +73,16 @@ public class InventoryTabButton : MonoBehaviour
             {
                 craftPanel.SetActive(false);
             }
+
+            if (itemPanel != null)
+            {
+                itemPanel.SetActive(false);
+            }
         }
+
+        // =========================================
+        // Craft
+        // =========================================
         else if (tabType == TabType.Craft)
         {
             if (bottlePanel != null)
@@ -73,6 +93,32 @@ public class InventoryTabButton : MonoBehaviour
             if (craftPanel != null)
             {
                 craftPanel.SetActive(true);
+            }
+
+            if (itemPanel != null)
+            {
+                itemPanel.SetActive(false);
+            }
+        }
+
+        // =========================================
+        // Item
+        // =========================================
+        else if (tabType == TabType.Item)
+        {
+            if (bottlePanel != null)
+            {
+                bottlePanel.SetActive(false);
+            }
+
+            if (craftPanel != null)
+            {
+                craftPanel.SetActive(false);
+            }
+
+            if (itemPanel != null)
+            {
+                itemPanel.SetActive(true);
             }
         }
     }

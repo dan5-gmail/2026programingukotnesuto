@@ -30,6 +30,9 @@ public class EditorLogManager : MonoBehaviour
         Instance = this;
     }
 
+    // =========================================================
+    // アイテム取得ログ
+    // =========================================================
     public void AddLog(Element.ElementType type, int amount)
     {
         string itemName = "";
@@ -63,6 +66,39 @@ public class EditorLogManager : MonoBehaviour
         string message =
             $"<color=#FFD700>!</color> {amount} <color={itemColor}>{itemName}</color> added.";
 
+        AddMessage(message);
+    }
+
+    // =========================================================
+    // クラフト成功ログ
+    // =========================================================
+    public void AddCraftLog(string itemName, int amount)
+    {
+        // ! = 黄色
+        // クラフトしたアイテム = 白色
+        string message =
+            $"<color=#FFD700>!</color> You crafted {amount} <color=#FFFFFF>{itemName}</color>.";
+
+        AddMessage(message);
+    }
+
+    // =========================================================
+    // エラーログ
+    // =========================================================
+    public void AddErrorLog(string message)
+    {
+        // エラーは ! も文章も赤色
+        string errorMessage =
+            $"<color=#FF0000>! {message}</color>";
+
+        AddMessage(errorMessage);
+    }
+
+    // =========================================================
+    // ログ追加共通処理
+    // =========================================================
+    private void AddMessage(string message)
+    {
         logs.Add(message);
 
         if (logs.Count > maxLogs)
@@ -71,10 +107,17 @@ public class EditorLogManager : MonoBehaviour
         }
 
         // 最新ログへ自動スクロール
-        topIndex = Mathf.Max(0, logs.Count - visibleLines);
+        topIndex = Mathf.Max(
+            0,
+            logs.Count - visibleLines
+        );
 
         RefreshLog();
     }
+
+    // =========================================================
+    // ログスクロール
+    // =========================================================
     public void Scroll(int direction)
     {
         topIndex -= direction;
@@ -88,11 +131,22 @@ public class EditorLogManager : MonoBehaviour
         RefreshLog();
     }
 
+    // =========================================================
+    // ログ表示更新
+    // =========================================================
     private void RefreshLog()
     {
+        if (logText == null)
+        {
+            return;
+        }
+
         logText.text = "";
 
-        int end = Mathf.Min(topIndex + visibleLines, logs.Count);
+        int end = Mathf.Min(
+            topIndex + visibleLines,
+            logs.Count
+        );
 
         for (int i = topIndex; i < end; i++)
         {
