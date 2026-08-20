@@ -80,7 +80,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            moveSpeed = defaultmoveSpeed * 2;
+            moveSpeed = defaultmoveSpeed * 1.5f;
         }
         else
         {
