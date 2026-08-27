@@ -614,8 +614,8 @@ MonoBehaviour:
   decorationType: 0
   elementPrefab: {fileID: 7385605110427883945}
   upForce: 0.7
-  minDrop: 2
-  maxDrop: 3
+  minDrop: 1
+  maxDrop: 2
 --- !u!64 &143449378
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3544,9 +3544,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DecorationDestroy
   decorationType: 0
   elementPrefab: {fileID: 7385605110427883945}
-  upForce: 1
-  minDrop: 2
-  maxDrop: 3
+  upForce: 0.3
+  minDrop: 1
+  maxDrop: 2
 --- !u!64 &715325853
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7180,7 +7180,7 @@ MonoBehaviour:
   decorationType: 1
   elementPrefab: {fileID: 7385605110427883945}
   upForce: 0.7
-  minDrop: 2
+  minDrop: 1
   maxDrop: 2
 --- !u!65 &1506057056
 BoxCollider:
@@ -8006,7 +8006,6 @@ MonoBehaviour:
   previewAlpha: 0.45
   rotationSpeed: 90
   stakeDepth: 0.5
-  stakeLength: 2
 --- !u!1 &1722593546 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 843b3f323e6427e4bbb6d8bf4c73edc1, type: 3}
@@ -9932,14 +9931,6 @@ PrefabInstance:
     - target: {fileID: 5111858221110529185, guid: 5df8493cb8cd84e4dbfaf0e6523bad13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5223476562952570905, guid: 5df8493cb8cd84e4dbfaf0e6523bad13, type: 3}
-      propertyPath: m_Size.y
-      value: 0.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 5223476562952570905, guid: 5df8493cb8cd84e4dbfaf0e6523bad13, type: 3}
-      propertyPath: m_Center.y
-      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 5601113835403761179, guid: 5df8493cb8cd84e4dbfaf0e6523bad13, type: 3}
       propertyPath: m_Name

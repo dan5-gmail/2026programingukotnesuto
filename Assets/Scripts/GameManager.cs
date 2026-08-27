@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EditorLogManager editorlogManager;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private CraftManager craftManager;
+    [SerializeField] private PlacementManager placementManager;
 
     [Header("Bottle")]
     [SerializeField] private Bottle bottle;
@@ -30,6 +31,14 @@ public class GameManager : MonoBehaviour
     public Bottle GetBottle()
     {
         return bottle;
+    }
+
+    // =========================================
+    // InventoryManager取得
+    // =========================================
+    public InventoryManager GetInventoryManager()
+    {
+        return inventoryManager;
     }
 
     // =========================================
@@ -89,5 +98,18 @@ public class GameManager : MonoBehaviour
         }
 
         craftManager.CraftWoodenStake();
+    }
+
+    // =========================================
+    // 木の杭の設置開始
+    // =========================================
+    public void StartWoodenStakePlacement()
+    {
+        if (placementManager == null)
+        {
+            return;
+        }
+
+        placementManager.StartWoodenStakePlacement();
     }
 }

@@ -27,8 +27,26 @@ public class InventoryTabButton : MonoBehaviour
     [SerializeField]
     private float hoverBrightness = 1.25f;
 
+    [Header("一番初めかどうか")]
+    [SerializeField]
+    private bool hasOpenedOnce = false;
+
     private Renderer[] renderers;
     private Color[] originalColors;
+
+
+    private void Start()
+    {
+        if (!hasOpenedOnce)
+        {
+
+            bottlePanel.SetActive(true);
+            craftPanel.SetActive(false);
+            itemPanel.SetActive(false);
+
+            hasOpenedOnce = true;
+        }
+    }
 
     private void Awake()
     {

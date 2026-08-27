@@ -99,18 +99,16 @@ public class EditorLogManager : MonoBehaviour
     // =========================================================
     private void AddMessage(string message)
     {
-        logs.Add(message);
+        // 新しいログを先頭に追加
+        logs.Insert(0, message);
 
         if (logs.Count > maxLogs)
         {
-            logs.RemoveAt(0);
+            logs.RemoveAt(logs.Count - 1);
         }
 
-        // 最新ログへ自動スクロール
-        topIndex = Mathf.Max(
-            0,
-            logs.Count - visibleLines
-        );
+        // 最新ログ（先頭）を表示
+        topIndex = 0;
 
         RefreshLog();
     }
@@ -120,7 +118,7 @@ public class EditorLogManager : MonoBehaviour
     // =========================================================
     public void Scroll(int direction)
     {
-        topIndex -= direction;
+        topIndex += direction;
 
         topIndex = Mathf.Clamp(
             topIndex,

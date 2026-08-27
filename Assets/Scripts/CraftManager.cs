@@ -27,6 +27,15 @@ public class CraftManager : MonoBehaviour
             return;
         }
 
+        // InventoryManager取得
+        InventoryManager inventoryManager =
+            GameManager.Instance.GetInventoryManager();
+
+        if (inventoryManager == null)
+        {
+            return;
+        }
+
         // =====================================
         // 木材足りるかどうか
         // =====================================
@@ -34,6 +43,18 @@ public class CraftManager : MonoBehaviour
         {
             GameManager.Instance.CraftErrorLog(
                 "Not enough wood."
+            );
+
+            return;
+        }
+
+        // =====================================
+        // 木の杭の在庫上限チェック
+        // =====================================
+        if (!inventoryManager.CanAddWoodenStake(woodenStakeAmount))
+        {
+            GameManager.Instance.CraftErrorLog(
+                "Wooden Stake inventory is full."
             );
 
             return;

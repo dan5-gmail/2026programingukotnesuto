@@ -3,8 +3,9 @@ using TMPro;
 
 public class WoodCountDisplay : MonoBehaviour
 {
-    [Header("BottleのGameObject")]
-    [SerializeField] private GameObject bottleObject;
+    [Header("BottleGameObject")]
+    [SerializeField]
+    private GameObject bottleObject;
 
     private TMP_Text text;
 
@@ -15,6 +16,7 @@ public class WoodCountDisplay : MonoBehaviour
 
     private void Update()
     {
+
         if (bottleObject == null)
             return;
 
@@ -23,6 +25,6 @@ public class WoodCountDisplay : MonoBehaviour
         if (bottle == null)
             return;
 
-        text.text = "×" + bottle.wood;
+        text.text = bottle.wood.ToString();
     }
 }
