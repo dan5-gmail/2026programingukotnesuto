@@ -18,6 +18,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private float Gravity;
 
+    [Header("坂")]
+    [SerializeField]
+    private float maxSlopeAngle = 45f;
+
     [Header("アニメーション")]
     private Animator walk;
 
@@ -25,6 +29,8 @@ public class PlayerMove : MonoBehaviour
 
     private Rigidbody rb;
     private bool isGrounded;
+    private Vector3 groundNormal = Vector3.up;
+    private Vector3 contactNormalSum = Vector3.zero;
 
     private Animator animator;
 
@@ -72,7 +78,15 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        groundNormal = contactNormalSum.sqrMagnitude > 0f ? contactNormalSum.normalized : Vector3.up;
+        contactNormalSum = Vector3.zero;
+
         rb.AddForce(Vector3.down * Gravity);
+    }
+
+    private bool OnSteepSlope()
+    {
+        return Vector3.Angle(groundNormal, Vector3.up) > maxSlopeAngle;
     }
 
 
@@ -97,6 +111,16 @@ public class PlayerMove : MonoBehaviour
         rb.linearVelocity = new Vector3(smoothX,
         rb.linearVelocity.y,
         0);
+
+        // 緩やかな坂では滑り落ちず、急斜面のみ滑る
+        if (moveX == 0 && isGrounded && !OnSteepSlope())
+        {
+            rb.linearVelocity = new Vector3(
+                0,
+                Mathf.Max(rb.linearVelocity.y, 0),
+                0
+            );
+        }
 
 
         animator.SetBool("PlayerWalk", moveX != 0);
@@ -138,6 +162,7 @@ public class PlayerMove : MonoBehaviour
             if (contact.normal.y > 0.5f)
             {
                 isGrounded = true;
+                contactNormalSum += contact.normal;
             }
         }
     }
