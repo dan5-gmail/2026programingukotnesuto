@@ -32,8 +32,12 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private float wallAngle = 45f; // 壁での配置角度（度）
     [SerializeField] private float maxGroundSlope = 0.3f; // 地面とみなす最大傾斜（Y成分）
 
+    [Header("配置遅延設定")]
+    [SerializeField] private float placementDelay = 0.5f; // 配置可能になるまでの遅延時間
+
     private bool placingWoodenStake = false;
     private bool placingWoodBridge = false;
+    private float placementStartTime; // 配置モード開始時刻
     private bool isRotating = false;
     private float currentRotation = 0f;
     private Vector3 lastMousePosition;
@@ -101,13 +105,16 @@ public class PlacementManager : MonoBehaviour
         // =========================================
         if (Input.GetMouseButtonDown(0))
         {
-            if (placingWoodenStake)
+            if (CanPlace())
             {
-                TryPlaceWoodenStake();
-            }
-            else if (placingWoodBridge)
-            {
-                TryPlaceWoodBridge();
+                if (placingWoodenStake)
+                {
+                    TryPlaceWoodenStake();
+                }
+                else if (placingWoodBridge)
+                {
+                    TryPlaceWoodBridge();
+                }
             }
         }
     }
@@ -137,6 +144,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         placingWoodenStake = true;
+        placementStartTime = Time.time; // 配置開始時刻を記録
 
         // InventoryPanelを閉じる
         InventoryPanel inventoryPanel =
@@ -468,6 +476,15 @@ public class PlacementManager : MonoBehaviour
     }
 
     // =========================================
+    // 配置可能かチェック
+    // =========================================
+    private bool CanPlace()
+    {
+        // 配置モード開始から十分な時間が経過しているか
+        return Time.time - placementStartTime >= placementDelay;
+    }
+
+    // =========================================
     // 木の橋配置モード開始
     // =========================================
     public void StartWoodBridgePlacement()
@@ -478,6 +495,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         placingWoodBridge = true;
+        placementStartTime = Time.time; // 配置開始時刻を記録
 
         // InventoryPanelを閉じる
         InventoryPanel inventoryPanel =
