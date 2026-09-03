@@ -256,6 +256,14 @@ public class PlacementManager : MonoBehaviour
             placeableLayers
         ))
         {
+            // 木の橋は地面の向きに合わせず、角度を常に0にする
+            if (placingWoodBridge)
+            {
+                previewObject.transform.position = hit.point;
+                previewObject.transform.rotation = Quaternion.identity;
+                return;
+            }
+
             // 壁か地面かを判定
             Vector3 normal = hit.normal;
 
