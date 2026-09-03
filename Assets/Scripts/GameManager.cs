@@ -101,6 +101,19 @@ public class GameManager : MonoBehaviour
     }
 
     // =========================================
+    // 木の橋をクラフト
+    // =========================================
+    public void CraftWoodBridge()
+    {
+        if (craftManager == null)
+        {
+            return;
+        }
+
+        craftManager.CraftWoodBridge();
+    }
+
+    // =========================================
     // 木の杭の設置開始
     // =========================================
     public void StartWoodenStakePlacement()
@@ -111,5 +124,18 @@ public class GameManager : MonoBehaviour
         }
 
         placementManager.StartWoodenStakePlacement();
+    }
+
+    // =========================================
+    // 木の橋の設置開始
+    // =========================================
+    public void StartWoodBridgePlacement()
+    {
+        if (placementManager == null)
+        {
+            return;
+        }
+
+        placementManager.StartWoodBridgePlacement();
     }
 }

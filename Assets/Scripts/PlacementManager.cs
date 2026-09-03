@@ -8,6 +8,12 @@ public class PlacementManager : MonoBehaviour
     [Header("木杭プレビュー")]
     [SerializeField] private GameObject woodenStakePreviewPrefab;
 
+    [Header("木の橋")]
+    [SerializeField] private GameObject woodBridgePrefab;
+
+    [Header("木の橋プレビュー")]
+    [SerializeField] private GameObject woodBridgePreviewPrefab;
+
     [Header("カメラ")]
     [SerializeField] private Camera mainCamera;
 
@@ -23,8 +29,11 @@ public class PlacementManager : MonoBehaviour
     [Header("杭の刺し込み設定")]
     [SerializeField] private float stakeDepth = 0.5f;
     [SerializeField] private float stakeLength = 2f; // 杭の長さ
+    [SerializeField] private float wallAngle = 45f; // 壁での配置角度（度）
+    [SerializeField] private float maxGroundSlope = 0.3f; // 地面とみなす最大傾斜（Y成分）
 
     private bool placingWoodenStake = false;
+    private bool placingWoodBridge = false;
     private bool isRotating = false;
     private float currentRotation = 0f;
     private Vector3 lastMousePosition;
@@ -33,7 +42,7 @@ public class PlacementManager : MonoBehaviour
 
     private void Update()
     {
-        if (!placingWoodenStake)
+        if (!placingWoodenStake && !placingWoodBridge)
         {
             return;
         }
@@ -75,33 +84,11 @@ public class PlacementManager : MonoBehaviour
         // =========================================
         if (isRotating)
         {
-            if (mainCamera == null)
-            {
-                mainCamera = Camera.main;
-            }
+            Vector3 currentMousePosition = Input.mousePosition;
+            float deltaX = currentMousePosition.x - lastMousePosition.x;
 
-            if (mainCamera != null)
-            {
-                // 地面の場合のみ回転を有効にする
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 1000f, placeableLayers))
-                {
-                    Vector3 normal = hit.normal;
-                    bool isWall = Mathf.Abs(normal.y) < 0.5f;
-
-                    // 地面の場合のみ回転を許可
-                    if (!isWall)
-                    {
-                        Vector3 currentMousePosition = Input.mousePosition;
-                        float deltaX = currentMousePosition.x - lastMousePosition.x;
-
-                        currentRotation += deltaX * rotationSpeed * Time.deltaTime;
-                        lastMousePosition = currentMousePosition;
-                    }
-                }
-            }
+            currentRotation += deltaX * rotationSpeed * Time.deltaTime;
+            lastMousePosition = currentMousePosition;
         }
 
         // =========================================
@@ -114,7 +101,14 @@ public class PlacementManager : MonoBehaviour
         // =========================================
         if (Input.GetMouseButtonDown(0))
         {
-            TryPlaceWoodenStake();
+            if (placingWoodenStake)
+            {
+                TryPlaceWoodenStake();
+            }
+            else if (placingWoodBridge)
+            {
+                TryPlaceWoodBridge();
+            }
         }
     }
 
@@ -162,7 +156,9 @@ public class PlacementManager : MonoBehaviour
     // =========================================
     private void CreatePreview()
     {
-        if (woodenStakePreviewPrefab == null)
+        GameObject prefabToUse = placingWoodenStake ? woodenStakePreviewPrefab : woodBridgePreviewPrefab;
+
+        if (prefabToUse == null)
         {
             return;
         }
@@ -174,7 +170,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         previewObject = Instantiate(
-            woodenStakePreviewPrefab
+            prefabToUse
         );
 
         // プレビューは物理演算させない
@@ -254,25 +250,48 @@ public class PlacementManager : MonoBehaviour
         {
             // 壁か地面かを判定
             Vector3 normal = hit.normal;
-            bool isWall = Mathf.Abs(normal.y) < 0.7f; // 判定を緩和して崖の横面も壁として扱う
+
+            // Y成分が大きい場合は地面、小さい場合は壁、中間は配置不可
+            bool isGround = normal.y > maxGroundSlope;
+            bool isWall = Mathf.Abs(normal.y) < (1f - maxGroundSlope);
+
+            // 地面でも壁でもない場合は配置不可
+            if (!isGround && !isWall)
+            {
+                return;
+            }
 
             Quaternion baseRotation;
 
             if (isWall)
             {
-                // 壁の場合：法線方向に杭を向ける
-                baseRotation = Quaternion.LookRotation(normal);
+                // 壁の場合：杭を斜めに配置
+                // 壁の法線方向を基準に斜めにする
+                Vector3 wallDirection = -normal;
+                Vector3 up = Vector3.up;
+
+                // 壁の法線と上方向から垂直なベクトルを計算
+                Vector3 right = Vector3.Cross(normal, up).normalized;
+                if (right == Vector3.zero)
+                {
+                    right = Vector3.right;
+                }
+
+                // 斜め方向（法線と上方向の間）
+                Vector3 diagonalDirection = Quaternion.AngleAxis(-wallAngle, right) * wallDirection;
+
+                baseRotation = Quaternion.LookRotation(diagonalDirection, up);
 
                 // 杭を壁にめり込ませる（刺した感じを出す）
-                previewObject.transform.position = hit.point - normal * stakeDepth;
+                previewObject.transform.position = hit.point; // マウスカーソルの位置に合わせる
                 previewObject.transform.rotation = baseRotation;
             }
             else
             {
-                // 地面の場合：上向きに配置してY軸周りに回転
-                baseRotation = Quaternion.FromToRotation(Vector3.up, normal);
+                // 地面の場合：上向きに配置してY軸周りに回転（XY平面のみ）
+                baseRotation = Quaternion.Euler(0, 0, 0); // 完全に上向き
                 Quaternion rotationOffset = Quaternion.Euler(0, currentRotation, 0);
-                previewObject.transform.position = hit.point;
+                previewObject.transform.position = hit.point; // マウスカーソルの位置に合わせる
                 previewObject.transform.rotation = baseRotation * rotationOffset;
             }
         }
@@ -325,25 +344,56 @@ public class PlacementManager : MonoBehaviour
             Quaternion.identity
         );
 
+        // 物理スクリプトを追加
+        WoodStakePhysics physics = newStake.GetComponent<WoodStakePhysics>();
+        if (physics == null)
+        {
+            physics = newStake.AddComponent<WoodStakePhysics>();
+        }
+
         // プレビューと同じ回転と位置を適用
         Vector3 normal = hit.normal;
-        bool isWall = Mathf.Abs(normal.y) < 0.7f; // 判定を緩和して崖の横面も壁として扱う
+
+        // Y成分が大きい場合は地面、小さい場合は壁、中間は配置不可
+        bool isGround = normal.y > maxGroundSlope;
+        bool isWall = Mathf.Abs(normal.y) < (1f - maxGroundSlope);
+
+        // 地面でも壁でもない場合は配置不可
+        if (!isGround && !isWall)
+        {
+            Destroy(newStake);
+            return;
+        }
 
         Quaternion baseRotation;
 
         if (isWall)
         {
-            // 壁の場合：法線方向に杭を向ける
-            baseRotation = Quaternion.LookRotation(normal);
+            // 壁の場合：杭を斜めに配置
+            // 壁の法線方向を基準に斜めにする
+            Vector3 wallDirection = -normal;
+            Vector3 up = Vector3.up;
+
+            // 壁の法線と上方向から垂直なベクトルを計算
+            Vector3 right = Vector3.Cross(normal, up).normalized;
+            if (right == Vector3.zero)
+            {
+                right = Vector3.right;
+            }
+
+            // 斜め方向（法線と上方向の間）
+            Vector3 diagonalDirection = Quaternion.AngleAxis(-wallAngle, right) * wallDirection;
+
+            baseRotation = Quaternion.LookRotation(diagonalDirection, up);
 
             // 杭を壁にめり込ませる（刺した感じを出す）
-            newStake.transform.position = hit.point - normal * stakeDepth;
+            newStake.transform.position = hit.point; // プレビューと同じ位置
             newStake.transform.rotation = baseRotation;
         }
         else
         {
-            // 地面の場合：上向きに配置してY軸周りに回転
-            baseRotation = Quaternion.FromToRotation(Vector3.up, normal);
+            // 地面の場合：上向きに配置してY軸周りに回転（XY平面のみ）
+            baseRotation = Quaternion.Euler(0, 0, 0); // 完全に上向き
             Quaternion rotationOffset = Quaternion.Euler(0, currentRotation, 0);
             newStake.transform.position = hit.point;
             newStake.transform.rotation = baseRotation * rotationOffset;
@@ -407,6 +457,7 @@ public class PlacementManager : MonoBehaviour
     public void CancelPlacement()
     {
         placingWoodenStake = false;
+        placingWoodBridge = false;
 
         // プレビュー削除
         if (previewObject != null)
@@ -414,6 +465,84 @@ public class PlacementManager : MonoBehaviour
             Destroy(previewObject);
             previewObject = null;
         }
+    }
+
+    // =========================================
+    // 木の橋配置モード開始
+    // =========================================
+    public void StartWoodBridgePlacement()
+    {
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+        placingWoodBridge = true;
+
+        // InventoryPanelを閉じる
+        InventoryPanel inventoryPanel =
+            FindAnyObjectByType<InventoryPanel>();
+
+        if (inventoryPanel != null)
+        {
+            inventoryPanel.ClosePanel();
+        }
+
+        // プレビュー生成
+        CreatePreview();
+    }
+
+    // =========================================
+    // 木の橋を実際に設置
+    // =========================================
+    private void TryPlaceWoodBridge()
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+        if (mainCamera == null)
+        {
+            return;
+        }
+
+        Ray ray =
+            mainCamera.ScreenPointToRay(
+                Input.mousePosition
+            );
+
+        RaycastHit hit;
+
+        // サーフェスに当たっていなければ設置しない
+        if (!Physics.Raycast(
+            ray,
+            out hit,
+            1000f,
+            placeableLayers
+        ))
+        {
+            return;
+        }
+
+        if (woodBridgePrefab == null)
+        {
+            return;
+        }
+
+        // =========================================
+        // 本物の木の橋を生成
+        // =========================================
+        GameObject newBridge = Instantiate(
+            woodBridgePrefab,
+            hit.point,
+            Quaternion.identity
+        );
+
+        // =========================================
+        // 配置完了
+        // =========================================
+        CancelPlacement();
     }
 
     // =========================================

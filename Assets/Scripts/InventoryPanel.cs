@@ -57,6 +57,9 @@ public class InventoryPanel : MonoBehaviour
         {
             // インベントリを開くたびにBottle画面から開始
             ShowBottlePanel();
+
+            // 配置モードをキャンセル
+            CancelPlacementMode();
         }
 
         float targetX = isOpen ? endX : startX;
@@ -154,5 +157,17 @@ public class InventoryPanel : MonoBehaviour
             fixedY,
             fixedZ
         );
+    }
+
+    // =========================================
+    // 配置モードをキャンセル
+    // =========================================
+    private void CancelPlacementMode()
+    {
+        PlacementManager placementManager = FindAnyObjectByType<PlacementManager>();
+        if (placementManager != null)
+        {
+            placementManager.CancelPlacement();
+        }
     }
 }
