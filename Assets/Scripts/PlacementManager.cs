@@ -565,6 +565,17 @@ public class PlacementManager : MonoBehaviour
             Quaternion.identity
         );
 
+        // 物理演算で傾かないよう、向きを0,0,0に固定する
+        newBridge.transform.rotation = Quaternion.identity;
+
+        Rigidbody bridgeRigidbody = newBridge.GetComponent<Rigidbody>();
+
+        if (bridgeRigidbody != null)
+        {
+            bridgeRigidbody.freezeRotation = true;
+            bridgeRigidbody.rotation = Quaternion.identity;
+        }
+
         // =========================================
         // 配置完了
         // =========================================
