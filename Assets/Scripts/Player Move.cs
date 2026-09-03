@@ -28,9 +28,12 @@ public class PlayerMove : MonoBehaviour
     private Animator jump;
 
     private Rigidbody rb;
-    private bool isGrounded;
-    private Vector3 groundNormal = Vector3.up;
     private Vector3 contactNormalSum = Vector3.zero;
+
+    // 直近の物理ステップで接地面と接触しているか
+    private bool isGrounded => contactNormalSum.sqrMagnitude > 0f;
+
+    private Vector3 groundNormal => isGrounded ? contactNormalSum.normalized : Vector3.up;
 
     private Animator animator;
 
@@ -78,8 +81,7 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        isGrounded = contactNormalSum.sqrMagnitude > 0f;
-        groundNormal = isGrounded ? contactNormalSum.normalized : Vector3.up;
+        // 接触は物理演算後のコールバックで積み直す
         contactNormalSum = Vector3.zero;
 
         rb.AddForce(Vector3.down * Gravity);
