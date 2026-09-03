@@ -18,13 +18,22 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private float Gravity;
 
+    [Header("坂")]
+    [SerializeField]
+    private float maxSlopeAngle = 45f;
+
     [Header("アニメーション")]
     private Animator walk;
 
     private Animator jump;
 
     private Rigidbody rb;
-    private bool isGrounded;
+    private Vector3 contactNormalSum = Vector3.zero;
+
+    // 直近の物理ステップで接地面と接触しているか
+    private bool isGrounded => contactNormalSum.sqrMagnitude > 0f;
+
+    private Vector3 groundNormal => isGrounded ? contactNormalSum.normalized : Vector3.up;
 
     private Animator animator;
 
@@ -72,7 +81,15 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        // 接触は物理演算後のコールバックで積み直す
+        contactNormalSum = Vector3.zero;
+
         rb.AddForce(Vector3.down * Gravity);
+    }
+
+    private bool OnSteepSlope()
+    {
+        return Vector3.Angle(groundNormal, Vector3.up) > maxSlopeAngle;
     }
 
 
@@ -97,6 +114,16 @@ public class PlayerMove : MonoBehaviour
         rb.linearVelocity = new Vector3(smoothX,
         rb.linearVelocity.y,
         0);
+
+        // 緩やかな坂では滑り落ちず、急斜面のみ滑る
+        if (moveX == 0 && isGrounded && !OnSteepSlope())
+        {
+            rb.linearVelocity = new Vector3(
+                0,
+                Mathf.Max(rb.linearVelocity.y, 0),
+                0
+            );
+        }
 
 
         animator.SetBool("PlayerWalk", moveX != 0);
@@ -137,15 +164,8 @@ public class PlayerMove : MonoBehaviour
             // 接地面が上向きなら地面
             if (contact.normal.y > 0.5f)
             {
-                isGrounded = true;
+                contactNormalSum += contact.normal;
             }
         }
-    }
-    // ＊ChatGPT使用
-    private void OnCollisionExit(Collision collision)
-    {
-        isGrounded = false;
-
-
     }
 }
