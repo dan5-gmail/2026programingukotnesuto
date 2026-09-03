@@ -78,7 +78,8 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        groundNormal = contactNormalSum.sqrMagnitude > 0f ? contactNormalSum.normalized : Vector3.up;
+        isGrounded = contactNormalSum.sqrMagnitude > 0f;
+        groundNormal = isGrounded ? contactNormalSum.normalized : Vector3.up;
         contactNormalSum = Vector3.zero;
 
         rb.AddForce(Vector3.down * Gravity);
@@ -161,16 +162,8 @@ public class PlayerMove : MonoBehaviour
             // 接地面が上向きなら地面
             if (contact.normal.y > 0.5f)
             {
-                isGrounded = true;
                 contactNormalSum += contact.normal;
             }
         }
-    }
-    // ＊ChatGPT使用
-    private void OnCollisionExit(Collision collision)
-    {
-        isGrounded = false;
-
-
     }
 }
