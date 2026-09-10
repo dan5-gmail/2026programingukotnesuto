@@ -114,6 +114,19 @@ public class GameManager : MonoBehaviour
     }
 
     // =========================================
+    // ゴール達成ログ
+    // =========================================
+    public void GoalReached()
+    {
+        if (editorlogManager == null)
+        {
+            return;
+        }
+
+        editorlogManager.AddCraftLog("Level Cleared!", 1);
+    }
+
+    // =========================================
     // 木の杭の設置開始
     // =========================================
     public void StartWoodenStakePlacement()

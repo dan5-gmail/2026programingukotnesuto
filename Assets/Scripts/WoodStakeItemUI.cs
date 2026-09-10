@@ -36,6 +36,7 @@ public class WoodenStakeItemUI : MonoBehaviour
 
             if (countText != null)
             {
+                countText.gameObject.SetActive(false);
                 countText.text = "";
             }
 
@@ -51,6 +52,10 @@ public class WoodenStakeItemUI : MonoBehaviour
         }
 
         // 個数表示
-        countText.text = $"×{amount}";
+        if (countText != null)
+        {
+            countText.gameObject.SetActive(true);
+            countText.text = $"×{amount}";
+        }
     }
 }

@@ -35,6 +35,9 @@ public class PlacementManager : MonoBehaviour
     [Header("配置遅延設定")]
     [SerializeField] private float placementDelay = 0.5f; // 配置可能になるまでの遅延時間
 
+    [Header("エリア設定")]
+    [SerializeField] private LayerMask bridgeZoneLayer; // 橋配置エリアのレイヤー
+
     private bool placingWoodenStake = false;
     private bool placingWoodBridge = false;
     private float placementStartTime; // 配置モード開始時刻
@@ -242,6 +245,12 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
+        // マウス位置が有効かチェック
+        if (float.IsInfinity(Input.mousePosition.x) || float.IsInfinity(Input.mousePosition.y))
+        {
+            return;
+        }
+
         Ray ray =
             mainCamera.ScreenPointToRay(
                 Input.mousePosition
@@ -249,13 +258,32 @@ public class PlacementManager : MonoBehaviour
 
         RaycastHit hit;
 
+        // WoodBridge配置時はBridgeZoneレイヤーも追加
+        LayerMask currentLayers = placeableLayers;
+        if (placingWoodBridge)
+        {
+            currentLayers |= bridgeZoneLayer;
+        }
+
         if (Physics.Raycast(
             ray,
             out hit,
             1000f,
-            placeableLayers
+            currentLayers
         ))
         {
+            // 木の橋の場合の処理（地形の角度に影響されない）
+            if (placingWoodBridge)
+            {
+                previewObject.transform.position = hit.point;
+                // プレビューも地形の傾きに影響させず、Y軸回転（currentRotation）のみ反映する場合：
+                previewObject.transform.rotation = Quaternion.Euler(0, currentRotation, 0);
+                // 完全に回転も固定（常に0,0,0）にしたい場合は以下のようにしてください
+                // previewObject.transform.rotation = Quaternion.identity;
+                return;
+            }
+
+            // --- 以下、既存の木杭用の処理 ---
             // 壁か地面かを判定
             Vector3 normal = hit.normal;
 
@@ -269,37 +297,42 @@ public class PlacementManager : MonoBehaviour
                 return;
             }
 
+            // 橋配置エリアのチェック
+            bool isBridgeZone = IsInBridgeZone(hit.point);
+
+            // 橋配置エリア内の場合、WoodBridgeのみ配置可能
+            if (isBridgeZone && !placingWoodBridge)
+            {
+                return;
+            }
+
             Quaternion baseRotation;
 
             if (isWall)
             {
                 // 壁の場合：杭を斜めに配置
-                // 壁の法線方向を基準に斜めにする
                 Vector3 wallDirection = -normal;
                 Vector3 up = Vector3.up;
 
-                // 壁の法線と上方向から垂直なベクトルを計算
                 Vector3 right = Vector3.Cross(normal, up).normalized;
                 if (right == Vector3.zero)
                 {
                     right = Vector3.right;
                 }
 
-                // 斜め方向（法線と上方向の間）
                 Vector3 diagonalDirection = Quaternion.AngleAxis(-wallAngle, right) * wallDirection;
 
                 baseRotation = Quaternion.LookRotation(diagonalDirection, up);
 
-                // 杭を壁にめり込ませる（刺した感じを出す）
-                previewObject.transform.position = hit.point; // マウスカーソルの位置に合わせる
+                previewObject.transform.position = hit.point;
                 previewObject.transform.rotation = baseRotation;
             }
             else
             {
-                // 地面の場合：上向きに配置してY軸周りに回転（XY平面のみ）
-                baseRotation = Quaternion.Euler(0, 0, 0); // 完全に上向き
+                // 地面の場合：上向きに配置してY軸周りに回転
+                baseRotation = Quaternion.Euler(0, 0, 0);
                 Quaternion rotationOffset = Quaternion.Euler(0, currentRotation, 0);
-                previewObject.transform.position = hit.point; // マウスカーソルの位置に合わせる
+                previewObject.transform.position = hit.point;
                 previewObject.transform.rotation = baseRotation * rotationOffset;
             }
         }
@@ -320,6 +353,12 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
+        // マウス位置が有効かチェック
+        if (float.IsInfinity(Input.mousePosition.x) || float.IsInfinity(Input.mousePosition.y))
+        {
+            return;
+        }
+
         Ray ray =
             mainCamera.ScreenPointToRay(
                 Input.mousePosition
@@ -328,17 +367,33 @@ public class PlacementManager : MonoBehaviour
         RaycastHit hit;
 
         // サーフェスに当たっていなければ設置しない
+        // WoodBridge配置時はBridgeZoneレイヤーも追加
+        LayerMask currentLayers = placeableLayers;
+        if (placingWoodBridge)
+        {
+            currentLayers |= bridgeZoneLayer;
+        }
+
         if (!Physics.Raycast(
             ray,
             out hit,
             1000f,
-            placeableLayers
+            currentLayers
         ))
         {
             return;
         }
 
         if (woodenStakePrefab == null)
+        {
+            return;
+        }
+
+        // 橋配置エリアのチェック
+        bool isBridgeZone = IsInBridgeZone(hit.point);
+
+        // 橋配置エリア内の場合、WoodBridgeのみ配置可能
+        if (isBridgeZone && !placingWoodBridge)
         {
             return;
         }
@@ -485,6 +540,22 @@ public class PlacementManager : MonoBehaviour
     }
 
     // =========================================
+    // 橋配置エリア内かチェック
+    // =========================================
+    private bool IsInBridgeZone(Vector3 point)
+    {
+        // 橋配置エリアレイヤーのすべてのコライダーをチェック
+        Collider[] bridgeZones = Physics.OverlapBox(
+            point,
+            Vector3.one * 0.1f,
+            Quaternion.identity,
+            bridgeZoneLayer
+        );
+
+        return bridgeZones.Length > 0;
+    }
+
+    // =========================================
     // 木の橋配置モード開始
     // =========================================
     public void StartWoodBridgePlacement()
@@ -525,6 +596,12 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
+        // マウス位置が有効かチェック
+        if (float.IsInfinity(Input.mousePosition.x) || float.IsInfinity(Input.mousePosition.y))
+        {
+            return;
+        }
+
         Ray ray =
             mainCamera.ScreenPointToRay(
                 Input.mousePosition
@@ -533,11 +610,15 @@ public class PlacementManager : MonoBehaviour
         RaycastHit hit;
 
         // サーフェスに当たっていなければ設置しない
+        // WoodBridge配置時はBridgeZoneレイヤーも追加
+        LayerMask currentLayers = placeableLayers;
+        currentLayers |= bridgeZoneLayer;
+
         if (!Physics.Raycast(
             ray,
             out hit,
             1000f,
-            placeableLayers
+            currentLayers
         ))
         {
             return;
@@ -549,7 +630,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         // =========================================
-        // 本物の木の橋を生成
+        // 本物の木橋を生成
         // =========================================
         GameObject newBridge = Instantiate(
             woodBridgePrefab,
