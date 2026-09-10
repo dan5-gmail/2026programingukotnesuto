@@ -272,20 +272,6 @@ public class PlacementManager : MonoBehaviour
             currentLayers
         ))
         {
-<<<<<<< HEAD
-            // 木の橋の場合の処理（地形の角度に影響されない）
-            if (placingWoodBridge)
-            {
-                previewObject.transform.position = hit.point;
-                // プレビューも地形の傾きに影響させず、Y軸回転（currentRotation）のみ反映する場合：
-                previewObject.transform.rotation = Quaternion.Euler(0, currentRotation, 0);
-                // 完全に回転も固定（常に0,0,0）にしたい場合は以下のようにしてください
-                // previewObject.transform.rotation = Quaternion.identity;
-                return;
-            }
-
-            // --- 以下、既存の木杭用の処理 ---
-=======
             // 木の橋は地面の向きに合わせず、角度を常に0にする
             if (placingWoodBridge)
             {
@@ -294,7 +280,6 @@ public class PlacementManager : MonoBehaviour
                 return;
             }
 
->>>>>>> 300a73ad354586ea51f29e37df17f21be07e576d
             // 壁か地面かを判定
             Vector3 normal = hit.normal;
 
