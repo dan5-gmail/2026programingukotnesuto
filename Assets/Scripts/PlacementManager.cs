@@ -272,6 +272,7 @@ public class PlacementManager : MonoBehaviour
             currentLayers
         ))
         {
+<<<<<<< HEAD
             // 木の橋の場合の処理（地形の角度に影響されない）
             if (placingWoodBridge)
             {
@@ -284,6 +285,16 @@ public class PlacementManager : MonoBehaviour
             }
 
             // --- 以下、既存の木杭用の処理 ---
+=======
+            // 木の橋は地面の向きに合わせず、角度を常に0にする
+            if (placingWoodBridge)
+            {
+                previewObject.transform.position = hit.point;
+                previewObject.transform.rotation = Quaternion.identity;
+                return;
+            }
+
+>>>>>>> 300a73ad354586ea51f29e37df17f21be07e576d
             // 壁か地面かを判定
             Vector3 normal = hit.normal;
 
