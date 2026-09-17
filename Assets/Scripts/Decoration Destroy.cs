@@ -46,7 +46,14 @@ public class DecorationDestroy : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Camera mainCamera = Camera.main;
+
+            if (mainCamera == null)
+            {
+                return;
+            }
+
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {

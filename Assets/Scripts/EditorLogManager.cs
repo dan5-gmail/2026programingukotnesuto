@@ -87,6 +87,8 @@ public class EditorLogManager : MonoBehaviour
     // =========================================================
     public void AddErrorLog(string message)
     {
+        Debug.Log($"EditorLogManager : エラーログ追加 - {message}");
+
         // エラーは ! も文章も赤色
         string errorMessage =
             $"<color=#FF0000>! {message}</color>";
@@ -136,6 +138,7 @@ public class EditorLogManager : MonoBehaviour
     {
         if (logText == null)
         {
+            Debug.LogWarning("EditorLogManager : logTextが設定されていません");
             return;
         }
 
@@ -150,5 +153,7 @@ public class EditorLogManager : MonoBehaviour
         {
             logText.text += logs[i] + "\n";
         }
+
+        Debug.Log($"EditorLogManager : ログ更新完了 - {logs.Count}件のログ、{end - topIndex}件表示");
     }
 }

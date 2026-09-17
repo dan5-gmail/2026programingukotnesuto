@@ -4,15 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class PlayerMove : MonoBehaviour
 {
-    //一部チャットgpt使用
+    // 一部ChatGPT使用
+
     [Header("プレイヤー動作")]
     [SerializeField]
     private float moveSpeed = 2f;
 
-    private float defaultmoveSpeed;
+    private float defaultMoveSpeed;
 
     [SerializeField]
-    private float jumpPower;
+    private float jumpPower = 5f;
 
     [SerializeField]
     private float Gravity = 9.8f;
@@ -37,28 +38,23 @@ public class PlayerMove : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
-        Debug.Log(animator);
-
         // 回転を固定
         rb.freezeRotation = true;
 
         // 2.5DなのでZ軸を固定
         rb.constraints |= RigidbodyConstraints.FreezePositionZ;
 
-        defaultmoveSpeed = moveSpeed;
+        defaultMoveSpeed = moveSpeed;
     }
 
 
     void Update()
     {
-        Playermove();
+        // 移動
+        PlayerMoveControl();
 
+        // ジャンプ
         PlayerJump();
-
-        animator.SetBool("PlayerJump", !isGrounded);
-
-        // Z軸をRigidbody側で固定しているので、
-        // transform.positionによる強制変更はしない
     }
 
 
@@ -90,7 +86,11 @@ public class PlayerMove : MonoBehaviour
     }
 
 
-    void Playermove()
+    // =========================================
+    // 左右移動
+    // =========================================
+
+    void PlayerMoveControl()
     {
         // =========================================
         // 速度変更
@@ -99,19 +99,24 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) ||
             Input.GetKey(KeyCode.RightShift))
         {
-            moveSpeed = defaultmoveSpeed * 1.5f;
+            moveSpeed = defaultMoveSpeed * 1.5f;
         }
         else
         {
-            moveSpeed = defaultmoveSpeed;
+            moveSpeed = defaultMoveSpeed;
         }
 
 
         // =========================================
-        // 左右移動
+        // 左右入力
         // =========================================
 
         float moveX = Input.GetAxis("Horizontal");
+
+
+        // =========================================
+        // Rigidbodyの速度
+        // =========================================
 
         float currentX = rb.linearVelocity.x;
 
@@ -122,6 +127,7 @@ public class PlayerMove : MonoBehaviour
             targetX,
             0.15f
         );
+
 
         rb.linearVelocity = new Vector3(
             smoothX,
@@ -134,28 +140,36 @@ public class PlayerMove : MonoBehaviour
         // 歩きアニメーション
         // =========================================
 
+        // Input.GetAxis()の微小な値で
+        // 勝手に歩き状態にならないようにする
+        bool isWalking = Mathf.Abs(moveX) > 0.1f;
+
         animator.SetBool(
             "PlayerWalk",
-            moveX != 0
+            isWalking
         );
 
 
         // =========================================
-        // 向き変更
+        // プレイヤーの向き
         // =========================================
 
-        if (moveX > 0)
+        if (moveX > 0.1f)
         {
             transform.rotation =
                 Quaternion.Euler(0, 92, 0);
         }
-        else if (moveX < 0)
+        else if (moveX < -0.1f)
         {
             transform.rotation =
                 Quaternion.Euler(0, -88, 0);
         }
     }
 
+
+    // =========================================
+    // ジャンプ
+    // =========================================
 
     void PlayerJump()
     {
@@ -165,11 +179,19 @@ public class PlayerMove : MonoBehaviour
             && isGrounded
         )
         {
+            // ジャンプ
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
                 jumpPower,
                 0
             );
+
+
+            // =========================================
+            // ジャンプアニメーション
+            // =========================================
+
+            animator.SetTrigger("PlayerJump");
         }
     }
 
@@ -181,7 +203,9 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         bool foundGround = false;
+
         Vector3 bestNormal = Vector3.up;
+
 
         foreach (ContactPoint contact in collision.contacts)
         {
@@ -192,14 +216,17 @@ public class PlayerMove : MonoBehaviour
                     contact.normal.y > bestNormal.y)
                 {
                     bestNormal = contact.normal;
+
                     foundGround = true;
                 }
             }
         }
 
+
         if (foundGround)
         {
             isGrounded = true;
+
             groundNormal = bestNormal;
         }
     }
@@ -208,6 +235,7 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         isGrounded = false;
+
         groundNormal = Vector3.up;
     }
 }
