@@ -61,6 +61,11 @@ public class InventoryPanel : MonoBehaviour
             // 配置モードをキャンセル
             CancelPlacementMode();
         }
+        else
+        {
+            // 閉じる時のみ配置モードをキャンセル
+            CancelPlacementMode();
+        }
 
         float targetX = isOpen ? endX : startX;
 

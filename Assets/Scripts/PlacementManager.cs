@@ -2,110 +2,283 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
+    // =========================================
+    // 木杭
+    // =========================================
+
     [Header("木杭")]
     [SerializeField] private GameObject woodenStakePrefab;
+
+
+    // =========================================
+    // 木杭プレビュー
+    // =========================================
 
     [Header("木杭プレビュー")]
     [SerializeField] private GameObject woodenStakePreviewPrefab;
 
+
+    // =========================================
+    // 木の橋
+    // =========================================
+
     [Header("木の橋")]
     [SerializeField] private GameObject woodBridgePrefab;
+
+
+    // =========================================
+    // 木の橋プレビュー
+    // =========================================
 
     [Header("木の橋プレビュー")]
     [SerializeField] private GameObject woodBridgePreviewPrefab;
 
+
+    // =========================================
+    // 栄養アイテム
+    // =========================================
+
+    [Header("栄養アイテム")]
+    [SerializeField] private GameObject nutritionItemPrefab;
+
+
+    // =========================================
+    // 栄養アイテムプレビュー
+    // =========================================
+
+    [Header("栄養アイテムプレビュー")]
+    [SerializeField] private GameObject nutritionItemPreviewPrefab;
+
+
+    // =========================================
+    // 睡蓮
+    // =========================================
+
+    [Header("睡蓮")]
+    [SerializeField] private GameObject lilyPadPrefab;
+
+
+    // =========================================
+    // 睡蓮プレビュー
+    // =========================================
+
+    [Header("睡蓮プレビュー")]
+    [SerializeField] private GameObject lilyPadPreviewPrefab;
+
+
+    // =========================================
+    // 重い石
+    // =========================================
+
+    [Header("重い石")]
+    [SerializeField] private GameObject heavyStonePrefab;
+
+
+    // =========================================
+    // 重い石プレビュー
+    // =========================================
+
+    [Header("重い石プレビュー")]
+    [SerializeField] private GameObject heavyStonePreviewPrefab;
+
+
+    // =========================================
+    // カメラ
+    // =========================================
+
     [Header("カメラ")]
     [SerializeField] private Camera mainCamera;
+
+
+    // =========================================
+    // 設置可能なサーフェス
+    // =========================================
 
     [Header("設置可能なサーフェス")]
     [SerializeField] private LayerMask placeableLayers;
 
+
+    // =========================================
+    // 重い石専用の設置可能Layer
+    // =========================================
+
+    [Header("重い石の設置可能Layer")]
+    [SerializeField] private LayerMask heavyStonePlaceableLayers;
+
+
+    // =========================================
+    // プレビュー設定
+    // =========================================
+
     [Header("プレビュー設定")]
     [SerializeField] private float previewAlpha = 0.45f;
+
+
+    // =========================================
+    // 回転設定
+    // =========================================
 
     [Header("回転設定")]
     [SerializeField] private float rotationSpeed = 90f;
 
+
+    // =========================================
+    // 杭の刺し込み設定
+    // =========================================
+
     [Header("杭の刺し込み設定")]
     [SerializeField] private float stakeDepth = 0.5f;
-    [SerializeField] private float stakeLength = 2f; // 杭の長さ
-    [SerializeField] private float wallAngle = 45f; // 壁での配置角度（度）
-    [SerializeField] private float maxGroundSlope = 0.3f; // 地面とみなす最大傾斜（Y成分）
+
+    [SerializeField] private float stakeLength = 2f;
+
+    [SerializeField] private float wallAngle = 45f;
+
+    [SerializeField] private float maxGroundSlope = 0.3f;
+
+
+    // =========================================
+    // 配置遅延設定
+    // =========================================
 
     [Header("配置遅延設定")]
-    [SerializeField] private float placementDelay = 0.5f; // 配置可能になるまでの遅延時間
+    [SerializeField] private float placementDelay = 0.5f;
+
+
+    // =========================================
+    // エリア設定
+    // =========================================
 
     [Header("エリア設定")]
-    [SerializeField] private LayerMask bridgeZoneLayer; // 橋配置エリアのレイヤー
+    [SerializeField] private LayerMask bridgeZoneLayer;
+
+
+    // =========================================
+    // 配置状態
+    // =========================================
 
     private bool placingWoodenStake = false;
     private bool placingWoodBridge = false;
-    private float placementStartTime; // 配置モード開始時刻
+    private bool placingNutritionItem = false;
+    private bool placingLilyPad = false;
+    private bool placingHeavyStone = false;
+
+    private float placementStartTime;
+
     private bool isRotating = false;
+
     private float currentRotation = 0f;
+
     private Vector3 lastMousePosition;
+
+
+    // =========================================
+    // NutritionItemPlacement
+    // =========================================
+
+    [Header("NutritionItemPlacement")]
+    [SerializeField] private NutritionItemPlacement nutritionItemPlacement;
+
+
+    // =========================================
+    // プレビュー
+    // =========================================
 
     private GameObject previewObject;
 
+
+    // =========================================
+    // Update
+    // =========================================
+
     private void Update()
     {
-        if (!placingWoodenStake && !placingWoodBridge)
+        if (!placingWoodenStake &&
+            !placingWoodBridge &&
+            !placingNutritionItem &&
+            !placingLilyPad &&
+            !placingHeavyStone)
         {
             return;
         }
 
+
         // =========================================
         // Escで配置モード終了
         // =========================================
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             CancelPlacement();
             return;
         }
 
+
         // =========================================
         // 右クリックでも配置モード終了
         // =========================================
+
         if (Input.GetMouseButtonDown(1))
         {
             CancelPlacement();
             return;
         }
 
+
         // =========================================
-        // Rキーで回転モード開始/終了
+        // Rキーで回転モード開始
         // =========================================
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             isRotating = true;
             lastMousePosition = Input.mousePosition;
         }
 
+
+        // =========================================
+        // Rキーを離したら回転終了
+        // =========================================
+
         if (Input.GetKeyUp(KeyCode.R))
         {
             isRotating = false;
         }
 
+
         // =========================================
         // 回転中にマウス移動で角度調整
         // =========================================
+
         if (isRotating)
         {
-            Vector3 currentMousePosition = Input.mousePosition;
-            float deltaX = currentMousePosition.x - lastMousePosition.x;
+            Vector3 currentMousePosition =
+                Input.mousePosition;
 
-            currentRotation += deltaX * rotationSpeed * Time.deltaTime;
-            lastMousePosition = currentMousePosition;
+            float deltaX =
+                currentMousePosition.x -
+                lastMousePosition.x;
+
+            currentRotation +=
+                deltaX *
+                rotationSpeed *
+                Time.deltaTime;
+
+            lastMousePosition =
+                currentMousePosition;
         }
 
+
         // =========================================
-        // プレビューをマウス位置へ移動
+        // プレビュー更新
         // =========================================
+
         UpdatePreview();
+
 
         // =========================================
         // 左クリックで設置
         // =========================================
+
         if (Input.GetMouseButtonDown(0))
         {
             if (CanPlace())
@@ -118,19 +291,34 @@ public class PlacementManager : MonoBehaviour
                 {
                     TryPlaceWoodBridge();
                 }
+                else if (placingNutritionItem)
+                {
+                    TryPlaceNutritionItem();
+                }
+                else if (placingLilyPad)
+                {
+                    TryPlaceLilyPad();
+                }
+                else if (placingHeavyStone)
+                {
+                    TryPlaceHeavyStone();
+                }
             }
         }
     }
 
+
     // =========================================
     // 木杭配置モード開始
     // =========================================
+
     public void StartWoodenStakePlacement()
     {
         if (GameManager.Instance == null)
         {
             return;
         }
+
 
         InventoryManager inventory =
             GameManager.Instance.GetInventoryManager();
@@ -140,16 +328,18 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
-        // 木杭を持っていなければ開始しない
+
         if (inventory.GetWoodenStake() <= 0)
         {
             return;
         }
 
-        placingWoodenStake = true;
-        placementStartTime = Time.time; // 配置開始時刻を記録
 
-        // InventoryPanelを閉じる
+        placingWoodenStake = true;
+
+        placementStartTime = Time.time;
+
+
         InventoryPanel inventoryPanel =
             FindAnyObjectByType<InventoryPanel>();
 
@@ -158,33 +348,217 @@ public class PlacementManager : MonoBehaviour
             inventoryPanel.ClosePanel();
         }
 
-        // プレビュー生成
+
         CreatePreview();
     }
+
+
+    // =========================================
+    // 木の橋配置モード開始
+    // =========================================
+
+    public void StartWoodBridgePlacement()
+    {
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+
+        placingWoodBridge = true;
+
+        placementStartTime = Time.time;
+
+
+        InventoryPanel inventoryPanel =
+            FindAnyObjectByType<InventoryPanel>();
+
+        if (inventoryPanel != null)
+        {
+            inventoryPanel.ClosePanel();
+        }
+
+
+        CreatePreview();
+    }
+
+
+    // =========================================
+    // 栄養アイテム配置モード開始
+    // =========================================
+
+    public void StartNutritionItemPlacement()
+    {
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+
+        placingNutritionItem = true;
+
+        placementStartTime = Time.time;
+
+
+        InventoryPanel inventoryPanel =
+            FindAnyObjectByType<InventoryPanel>();
+
+        if (inventoryPanel != null)
+        {
+            inventoryPanel.ClosePanel();
+        }
+
+
+        CreatePreview();
+    }
+
+
+    // =========================================
+    // 睡蓮配置モード開始
+    // =========================================
+
+    public void StartLilyPadPlacement()
+    {
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+
+        InventoryManager inventory =
+            GameManager.Instance.GetInventoryManager();
+
+        if (inventory == null)
+        {
+            return;
+        }
+
+
+        if (inventory.GetLilyPad() <= 0)
+        {
+            return;
+        }
+
+
+        placingLilyPad = true;
+
+        placementStartTime = Time.time;
+
+
+        InventoryPanel inventoryPanel =
+            FindAnyObjectByType<InventoryPanel>();
+
+        if (inventoryPanel != null)
+        {
+            inventoryPanel.ClosePanel();
+        }
+
+
+        CreatePreview();
+    }
+
+
+    // =========================================
+    // 重い石配置モード開始
+    // =========================================
+
+    public void StartHeavyStonePlacement()
+    {
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+
+        InventoryManager inventory =
+            GameManager.Instance.GetInventoryManager();
+
+        if (inventory == null)
+        {
+            return;
+        }
+
+
+        if (inventory.GetHeavyStone() <= 0)
+        {
+            return;
+        }
+
+
+        placingHeavyStone = true;
+
+        placementStartTime = Time.time;
+
+
+        InventoryPanel inventoryPanel =
+            FindAnyObjectByType<InventoryPanel>();
+
+        if (inventoryPanel != null)
+        {
+            inventoryPanel.ClosePanel();
+        }
+
+
+        CreatePreview();
+    }
+
 
     // =========================================
     // プレビュー生成
     // =========================================
+
     private void CreatePreview()
     {
-        GameObject prefabToUse = placingWoodenStake ? woodenStakePreviewPrefab : woodBridgePreviewPrefab;
+        GameObject prefabToUse = null;
+
+
+        if (placingWoodenStake)
+        {
+            prefabToUse =
+                woodenStakePreviewPrefab;
+        }
+        else if (placingWoodBridge)
+        {
+            prefabToUse =
+                woodBridgePreviewPrefab;
+        }
+        else if (placingNutritionItem)
+        {
+            prefabToUse =
+                nutritionItemPreviewPrefab;
+        }
+        else if (placingLilyPad)
+        {
+            prefabToUse =
+                lilyPadPreviewPrefab;
+        }
+        else if (placingHeavyStone)
+        {
+            prefabToUse =
+                heavyStonePreviewPrefab;
+        }
+
 
         if (prefabToUse == null)
         {
             return;
         }
 
-        // 既にある場合は作らない
+
         if (previewObject != null)
         {
             Destroy(previewObject);
         }
 
-        previewObject = Instantiate(
-            prefabToUse
-        );
 
-        // プレビューは物理演算させない
+        previewObject =
+            Instantiate(prefabToUse);
+
+
+        // =========================================
+        // 物理演算を無効化
+        // =========================================
+
         Rigidbody rb =
             previewObject.GetComponent<Rigidbody>();
 
@@ -194,7 +568,11 @@ public class PlacementManager : MonoBehaviour
             rb.useGravity = false;
         }
 
+
+        // =========================================
         // Colliderを無効化
+        // =========================================
+
         Collider[] colliders =
             previewObject.GetComponentsInChildren<Collider>();
 
@@ -203,19 +581,26 @@ public class PlacementManager : MonoBehaviour
             collider.enabled = false;
         }
 
+
+        // =========================================
         // 半透明化
+        // =========================================
+
         Renderer[] renderers =
             previewObject.GetComponentsInChildren<Renderer>();
 
         foreach (Renderer renderer in renderers)
         {
-            Material material = renderer.material;
+            Material material =
+                renderer.material;
 
             if (material.HasProperty("_BaseColor"))
             {
-                Color color = material.GetColor("_BaseColor");
+                Color color =
+                    material.GetColor("_BaseColor");
 
-                color.a = previewAlpha;
+                color.a =
+                    previewAlpha;
 
                 material.SetColor(
                     "_BaseColor",
@@ -225,9 +610,11 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
+
     // =========================================
     // プレビューをマウスに追従
     // =========================================
+
     private void UpdatePreview()
     {
         if (previewObject == null)
@@ -235,108 +622,254 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
+
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
 
+
         if (mainCamera == null)
         {
             return;
         }
 
-        // マウス位置が有効かチェック
-        if (float.IsInfinity(Input.mousePosition.x) || float.IsInfinity(Input.mousePosition.y))
+
+        if (float.IsInfinity(Input.mousePosition.x) ||
+            float.IsInfinity(Input.mousePosition.y))
         {
             return;
         }
+
 
         Ray ray =
             mainCamera.ScreenPointToRay(
                 Input.mousePosition
             );
 
+
         RaycastHit hit;
 
-        // WoodBridge配置時はBridgeZoneレイヤーも追加
-        LayerMask currentLayers = placeableLayers;
-        if (placingWoodBridge)
+
+        // =========================================
+        // 使用するLayer
+        // =========================================
+
+        LayerMask currentLayers =
+            placeableLayers;
+
+
+        // 重い石だけ専用Layer
+        if (placingHeavyStone)
         {
-            currentLayers |= bridgeZoneLayer;
+            currentLayers =
+                heavyStonePlaceableLayers;
         }
+        else if (placingWoodBridge)
+        {
+            currentLayers |=
+                bridgeZoneLayer;
+        }
+
+
+        // =========================================
+        // Raycast
+        // =========================================
 
         if (Physics.Raycast(
             ray,
             out hit,
             1000f,
-            currentLayers
-        ))
+            currentLayers))
         {
-            // 木の橋は地面の向きに合わせず、角度を常に0にする
+            // =====================================
+            // 木の橋
+            // =====================================
+
             if (placingWoodBridge)
             {
-                previewObject.transform.position = hit.point;
-                previewObject.transform.rotation = Quaternion.identity;
-                return;
+                previewObject.transform.position =
+                    hit.point;
+
+                previewObject.transform.rotation =
+                    Quaternion.identity;
             }
 
-            // 壁か地面かを判定
-            Vector3 normal = hit.normal;
 
-            // Y成分が大きい場合は地面、小さい場合は壁、中間は配置不可
-            bool isGround = normal.y > maxGroundSlope;
-            bool isWall = Mathf.Abs(normal.y) < (1f - maxGroundSlope);
+            // =====================================
+            // 栄養アイテム
+            // =====================================
 
-            // 地面でも壁でもない場合は配置不可
-            if (!isGround && !isWall)
+            else if (placingNutritionItem)
             {
-                return;
+                previewObject.transform.position =
+                    hit.point +
+                    Vector3.up * 0.1f;
+
+                previewObject.transform.rotation =
+                    Quaternion.identity;
             }
 
-            // 橋配置エリアのチェック
-            bool isBridgeZone = IsInBridgeZone(hit.point);
 
-            // 橋配置エリア内の場合、WoodBridgeのみ配置可能
-            if (isBridgeZone && !placingWoodBridge)
+            // =====================================
+            // 睡蓮
+            // =====================================
+
+            else if (placingLilyPad)
             {
-                return;
+                previewObject.transform.position =
+                    hit.point +
+                    Vector3.up * 0.05f;
+
+                previewObject.transform.rotation =
+                    Quaternion.identity;
             }
 
-            Quaternion baseRotation;
 
-            if (isWall)
+            // =====================================
+            // 重い石
+            // =====================================
+
+            else if (placingHeavyStone)
             {
-                // 壁の場合：杭を斜めに配置
-                Vector3 wallDirection = -normal;
-                Vector3 up = Vector3.up;
+                previewObject.transform.position =
+                    hit.point +
+                    Vector3.up * 0.05f;
 
-                Vector3 right = Vector3.Cross(normal, up).normalized;
-                if (right == Vector3.zero)
+                previewObject.transform.rotation =
+                    Quaternion.identity;
+            }
+
+
+            // =====================================
+            // 木杭
+            // =====================================
+
+            else if (placingWoodenStake)
+            {
+                Vector3 normal =
+                    hit.normal;
+
+
+                bool isGround =
+                    normal.y >
+                    maxGroundSlope;
+
+
+                bool isWall =
+                    Mathf.Abs(normal.y) <
+                    (1f - maxGroundSlope);
+
+
+                if (!isGround && !isWall)
                 {
-                    right = Vector3.right;
+                    return;
                 }
 
-                Vector3 diagonalDirection = Quaternion.AngleAxis(-wallAngle, right) * wallDirection;
 
-                baseRotation = Quaternion.LookRotation(diagonalDirection, up);
+                bool isBridgeZone =
+                    IsInBridgeZone(
+                        hit.point
+                    );
 
-                previewObject.transform.position = hit.point;
-                previewObject.transform.rotation = baseRotation;
-            }
-            else
-            {
-                // 地面の場合：上向きに配置してY軸周りに回転
-                baseRotation = Quaternion.Euler(0, 0, 0);
-                Quaternion rotationOffset = Quaternion.Euler(0, currentRotation, 0);
-                previewObject.transform.position = hit.point;
-                previewObject.transform.rotation = baseRotation * rotationOffset;
+
+                if (isBridgeZone &&
+                    !placingWoodBridge)
+                {
+                    return;
+                }
+
+
+                Quaternion baseRotation;
+
+
+                // =================================
+                // 壁
+                // =================================
+
+                if (isWall)
+                {
+                    Vector3 wallDirection =
+                        -normal;
+
+                    Vector3 up =
+                        Vector3.up;
+
+                    Vector3 right =
+                        Vector3.Cross(
+                            normal,
+                            up
+                        ).normalized;
+
+
+                    if (right == Vector3.zero)
+                    {
+                        right =
+                            Vector3.right;
+                    }
+
+
+                    Vector3 diagonalDirection =
+                        Quaternion.AngleAxis(
+                            -wallAngle,
+                            right
+                        ) *
+                        wallDirection;
+
+
+                    baseRotation =
+                        Quaternion.LookRotation(
+                            diagonalDirection,
+                            up
+                        );
+
+
+                    previewObject.transform.position =
+                        hit.point;
+
+                    previewObject.transform.rotation =
+                        baseRotation;
+                }
+
+
+                // =================================
+                // 地面
+                // =================================
+
+                else
+                {
+                    baseRotation =
+                        Quaternion.Euler(
+                            0,
+                            0,
+                            0
+                        );
+
+
+                    Quaternion rotationOffset =
+                        Quaternion.Euler(
+                            0,
+                            currentRotation,
+                            0
+                        );
+
+
+                    previewObject.transform.position =
+                        hit.point;
+
+                    previewObject.transform.rotation =
+                        baseRotation *
+                        rotationOffset;
+                }
             }
         }
     }
 
+
     // =========================================
     // 木杭を実際に設置
     // =========================================
+
     private void TryPlaceWoodenStake()
     {
         if (mainCamera == null)
@@ -344,127 +877,218 @@ public class PlacementManager : MonoBehaviour
             mainCamera = Camera.main;
         }
 
+
         if (mainCamera == null)
         {
             return;
         }
 
-        // マウス位置が有効かチェック
-        if (float.IsInfinity(Input.mousePosition.x) || float.IsInfinity(Input.mousePosition.y))
+
+        if (float.IsInfinity(Input.mousePosition.x) ||
+            float.IsInfinity(Input.mousePosition.y))
         {
             return;
         }
+
 
         Ray ray =
             mainCamera.ScreenPointToRay(
                 Input.mousePosition
             );
 
+
         RaycastHit hit;
 
-        // サーフェスに当たっていなければ設置しない
-        // WoodBridge配置時はBridgeZoneレイヤーも追加
-        LayerMask currentLayers = placeableLayers;
+
+        LayerMask currentLayers =
+            placeableLayers;
+
+
         if (placingWoodBridge)
         {
-            currentLayers |= bridgeZoneLayer;
+            currentLayers |=
+                bridgeZoneLayer;
         }
+
 
         if (!Physics.Raycast(
             ray,
             out hit,
             1000f,
-            currentLayers
-        ))
+            currentLayers))
         {
             return;
         }
+
 
         if (woodenStakePrefab == null)
         {
             return;
         }
 
-        // 橋配置エリアのチェック
-        bool isBridgeZone = IsInBridgeZone(hit.point);
 
-        // 橋配置エリア内の場合、WoodBridgeのみ配置可能
-        if (isBridgeZone && !placingWoodBridge)
+        bool isBridgeZone =
+            IsInBridgeZone(
+                hit.point
+            );
+
+
+        if (isBridgeZone &&
+            !placingWoodBridge)
         {
             return;
         }
 
-        // =========================================
-        // 本物の木杭を生成
-        // =========================================
-        GameObject newStake = Instantiate(
-            woodenStakePrefab,
-            hit.point,
-            Quaternion.identity
-        );
 
-        // 物理スクリプトを追加
-        WoodStakePhysics physics = newStake.GetComponent<WoodStakePhysics>();
+        // =========================================
+        // 木杭生成
+        // =========================================
+
+        GameObject newStake =
+            Instantiate(
+                woodenStakePrefab,
+                hit.point,
+                Quaternion.identity
+            );
+
+
+        // =========================================
+        // 物理スクリプト
+        // =========================================
+
+        WoodStakePhysics physics =
+            newStake.GetComponent<WoodStakePhysics>();
+
+
         if (physics == null)
         {
-            physics = newStake.AddComponent<WoodStakePhysics>();
+            physics =
+                newStake.AddComponent<WoodStakePhysics>();
         }
 
-        // プレビューと同じ回転と位置を適用
-        Vector3 normal = hit.normal;
 
-        // Y成分が大きい場合は地面、小さい場合は壁、中間は配置不可
-        bool isGround = normal.y > maxGroundSlope;
-        bool isWall = Mathf.Abs(normal.y) < (1f - maxGroundSlope);
+        Vector3 normal =
+            hit.normal;
 
-        // 地面でも壁でもない場合は配置不可
+
+        bool isGround =
+            normal.y >
+            maxGroundSlope;
+
+
+        bool isWall =
+            Mathf.Abs(normal.y) <
+            (1f - maxGroundSlope);
+
+
         if (!isGround && !isWall)
         {
             Destroy(newStake);
             return;
         }
 
+
         Quaternion baseRotation;
+
+
+        // =========================================
+        // 壁
+        // =========================================
 
         if (isWall)
         {
-            // 壁の場合：杭を斜めに配置
-            // 壁の法線方向を基準に斜めにする
-            Vector3 wallDirection = -normal;
-            Vector3 up = Vector3.up;
+            Vector3 wallDirection =
+                -normal;
 
-            // 壁の法線と上方向から垂直なベクトルを計算
-            Vector3 right = Vector3.Cross(normal, up).normalized;
+            Vector3 up =
+                Vector3.up;
+
+            Vector3 right =
+                Vector3.Cross(
+                    normal,
+                    up
+                ).normalized;
+
+
             if (right == Vector3.zero)
             {
-                right = Vector3.right;
+                right =
+                    Vector3.right;
             }
 
-            // 斜め方向（法線と上方向の間）
-            Vector3 diagonalDirection = Quaternion.AngleAxis(-wallAngle, right) * wallDirection;
 
-            baseRotation = Quaternion.LookRotation(diagonalDirection, up);
+            Vector3 diagonalDirection =
+                Quaternion.AngleAxis(
+                    -wallAngle,
+                    right
+                ) *
+                wallDirection;
 
-            // 杭を壁にめり込ませる（刺した感じを出す）
-            newStake.transform.position = hit.point; // プレビューと同じ位置
-            newStake.transform.rotation = baseRotation;
+
+            baseRotation =
+                Quaternion.LookRotation(
+                    diagonalDirection,
+                    up
+                );
+
+
+            newStake.transform.position =
+                hit.point;
+
+            newStake.transform.rotation =
+                baseRotation;
         }
+
+
+        // =========================================
+        // 地面
+        // =========================================
+
         else
         {
-            // 地面の場合：上向きに配置してY軸周りに回転（XY平面のみ）
-            baseRotation = Quaternion.Euler(0, 0, 0); // 完全に上向き
-            Quaternion rotationOffset = Quaternion.Euler(0, currentRotation, 0);
-            newStake.transform.position = hit.point;
-            newStake.transform.rotation = baseRotation * rotationOffset;
+            baseRotation =
+                Quaternion.Euler(
+                    0,
+                    0,
+                    0
+                );
+
+
+            Quaternion rotationOffset =
+                Quaternion.Euler(
+                    0,
+                    currentRotation,
+                    0
+                );
+
+
+            newStake.transform.position =
+                hit.point;
+
+            newStake.transform.rotation =
+                baseRotation *
+                rotationOffset;
         }
 
-        // 杭の先端が地面にめり込んでいるかチェック
-        bool isEmbedded = CheckIfStakeEmbedded(newStake, normal, isWall);
+
+        // =========================================
+        // めり込みチェック
+        // =========================================
+
+        bool isEmbedded =
+            CheckIfStakeEmbedded(
+                newStake,
+                normal,
+                isWall
+            );
+
+
+        Rigidbody rb =
+            newStake.GetComponent<Rigidbody>();
+
 
         if (isEmbedded)
         {
-            // めり込んでいる場合は物理的に固定
-            Rigidbody rb = newStake.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.isKinematic = true;
@@ -472,8 +1096,6 @@ public class PlacementManager : MonoBehaviour
         }
         else
         {
-            // めり込んでいない場合は物理演算を有効にして落下させる
-            Rigidbody rb = newStake.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.isKinematic = false;
@@ -481,105 +1103,53 @@ public class PlacementManager : MonoBehaviour
             }
         }
 
-        // Colliderを有効化
-        Collider[] colliders = newStake.GetComponentsInChildren<Collider>();
+
+        // =========================================
+        // Collider有効化
+        // =========================================
+
+        Collider[] colliders =
+            newStake.GetComponentsInChildren<Collider>();
+
+
         foreach (Collider collider in colliders)
         {
             collider.enabled = true;
         }
 
+
         // =========================================
         // インベントリから1本消費
         // =========================================
+
         InventoryManager inventory =
             GameManager.Instance.GetInventoryManager();
+
 
         if (inventory == null)
         {
             return;
         }
 
+
         inventory.UseWoodenStake(1);
 
+
         // =========================================
-        // もう残っていないなら終了
+        // 杭がなくなったら終了
         // =========================================
+
         if (inventory.GetWoodenStake() <= 0)
         {
             CancelPlacement();
         }
     }
 
-    // =========================================
-    // 配置モード終了
-    // =========================================
-    public void CancelPlacement()
-    {
-        placingWoodenStake = false;
-        placingWoodBridge = false;
-
-        // プレビュー削除
-        if (previewObject != null)
-        {
-            Destroy(previewObject);
-            previewObject = null;
-        }
-    }
-
-    // =========================================
-    // 配置可能かチェック
-    // =========================================
-    private bool CanPlace()
-    {
-        // 配置モード開始から十分な時間が経過しているか
-        return Time.time - placementStartTime >= placementDelay;
-    }
-
-    // =========================================
-    // 橋配置エリア内かチェック
-    // =========================================
-    private bool IsInBridgeZone(Vector3 point)
-    {
-        // 橋配置エリアレイヤーのすべてのコライダーをチェック
-        Collider[] bridgeZones = Physics.OverlapBox(
-            point,
-            Vector3.one * 0.1f,
-            Quaternion.identity,
-            bridgeZoneLayer
-        );
-
-        return bridgeZones.Length > 0;
-    }
-
-    // =========================================
-    // 木の橋配置モード開始
-    // =========================================
-    public void StartWoodBridgePlacement()
-    {
-        if (GameManager.Instance == null)
-        {
-            return;
-        }
-
-        placingWoodBridge = true;
-        placementStartTime = Time.time; // 配置開始時刻を記録
-
-        // InventoryPanelを閉じる
-        InventoryPanel inventoryPanel =
-            FindAnyObjectByType<InventoryPanel>();
-
-        if (inventoryPanel != null)
-        {
-            inventoryPanel.ClosePanel();
-        }
-
-        // プレビュー生成
-        CreatePreview();
-    }
 
     // =========================================
     // 木の橋を実際に設置
     // =========================================
+
     private void TryPlaceWoodBridge()
     {
         if (mainCamera == null)
@@ -587,88 +1157,492 @@ public class PlacementManager : MonoBehaviour
             mainCamera = Camera.main;
         }
 
+
         if (mainCamera == null)
         {
             return;
         }
 
-        // マウス位置が有効かチェック
-        if (float.IsInfinity(Input.mousePosition.x) || float.IsInfinity(Input.mousePosition.y))
+
+        if (float.IsInfinity(Input.mousePosition.x) ||
+            float.IsInfinity(Input.mousePosition.y))
         {
             return;
         }
+
 
         Ray ray =
             mainCamera.ScreenPointToRay(
                 Input.mousePosition
             );
 
+
         RaycastHit hit;
 
-        // サーフェスに当たっていなければ設置しない
-        // WoodBridge配置時はBridgeZoneレイヤーも追加
-        LayerMask currentLayers = placeableLayers;
-        currentLayers |= bridgeZoneLayer;
+
+        LayerMask currentLayers =
+            placeableLayers;
+
+
+        currentLayers |=
+            bridgeZoneLayer;
+
 
         if (!Physics.Raycast(
             ray,
             out hit,
             1000f,
-            currentLayers
-        ))
+            currentLayers))
         {
             return;
         }
+
 
         if (woodBridgePrefab == null)
         {
             return;
         }
 
+
         // =========================================
-        // 本物の木橋を生成
+        // 木橋生成
         // =========================================
-        GameObject newBridge = Instantiate(
+
+        Instantiate(
             woodBridgePrefab,
             hit.point,
             Quaternion.identity
         );
 
+
         // =========================================
         // 配置完了
         // =========================================
+
         CancelPlacement();
     }
+
+
+    // =========================================
+    // 栄養アイテムを実際に設置
+    // =========================================
+
+    private void TryPlaceNutritionItem()
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+
+        if (mainCamera == null)
+        {
+            return;
+        }
+
+
+        if (float.IsInfinity(Input.mousePosition.x) ||
+            float.IsInfinity(Input.mousePosition.y))
+        {
+            return;
+        }
+
+
+        Ray ray =
+            mainCamera.ScreenPointToRay(
+                Input.mousePosition
+            );
+
+
+        if (!Physics.Raycast(
+            ray,
+            out RaycastHit hit,
+            100f,
+            placeableLayers))
+        {
+            return;
+        }
+
+
+        if (nutritionItemPrefab == null)
+        {
+            return;
+        }
+
+
+        Instantiate(
+            nutritionItemPrefab,
+            hit.point +
+            Vector3.up * 0.1f,
+            Quaternion.identity
+        );
+
+
+        // 栄養アイテムを1個消費
+        InventoryManager inventoryManager =
+            GameManager.Instance.GetInventoryManager();
+
+
+        if (inventoryManager != null)
+        {
+            inventoryManager.UseNutritionItem();
+        }
+
+
+        CancelPlacement();
+    }
+
+
+    // =========================================
+    // 睡蓮を実際に設置
+    // =========================================
+
+    private void TryPlaceLilyPad()
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+
+        if (mainCamera == null)
+        {
+            return;
+        }
+
+
+        if (float.IsInfinity(Input.mousePosition.x) ||
+            float.IsInfinity(Input.mousePosition.y))
+        {
+            return;
+        }
+
+
+        Ray ray =
+            mainCamera.ScreenPointToRay(
+                Input.mousePosition
+            );
+
+
+        RaycastHit hit;
+
+
+        if (!Physics.Raycast(
+            ray,
+            out hit,
+            1000f,
+            placeableLayers))
+        {
+            return;
+        }
+
+
+        if (lilyPadPrefab == null)
+        {
+            return;
+        }
+
+
+        // =========================================
+        // 睡蓮生成
+        // =========================================
+
+        Instantiate(
+            lilyPadPrefab,
+            hit.point +
+            Vector3.up * 0.05f,
+            Quaternion.identity
+        );
+
+
+        // 睡蓮を1個消費
+        InventoryManager inventoryManager =
+            GameManager.Instance.GetInventoryManager();
+
+
+        if (inventoryManager != null)
+        {
+            inventoryManager.UseLilyPad();
+        }
+
+
+        // =========================================
+        // まだ睡蓮があるなら継続
+        // =========================================
+
+        if (inventoryManager != null &&
+            inventoryManager.GetLilyPad() > 0)
+        {
+            Debug.Log(
+                "PlacementManager : 睡蓮が残っているため配置モード継続"
+            );
+        }
+        else
+        {
+            CancelPlacement();
+        }
+    }
+
+
+    // =========================================
+    // 重い石を実際に設置
+    // =========================================
+
+    private void TryPlaceHeavyStone()
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+
+        if (mainCamera == null)
+        {
+            return;
+        }
+
+
+        if (float.IsInfinity(Input.mousePosition.x) ||
+            float.IsInfinity(Input.mousePosition.y))
+        {
+            return;
+        }
+
+
+        Ray ray =
+            mainCamera.ScreenPointToRay(
+                Input.mousePosition
+            );
+
+
+        RaycastHit hit;
+
+
+        // =========================================
+        // 重い石は専用Layerのみ
+        // =========================================
+
+        if (!Physics.Raycast(
+            ray,
+            out hit,
+            1000f,
+            heavyStonePlaceableLayers))
+        {
+            return;
+        }
+
+
+        if (heavyStonePrefab == null)
+        {
+            Debug.LogWarning(
+                "PlacementManager : heavyStonePrefabが設定されていません。"
+            );
+
+            return;
+        }
+
+
+        // =========================================
+        // 重い石生成
+        // =========================================
+
+        GameObject newHeavyStone =
+            Instantiate(
+                heavyStonePrefab,
+                hit.point +
+                Vector3.up * 0.05f,
+                Quaternion.identity
+            );
+
+
+        Debug.Log(
+            "PlacementManager : 重い石を配置しました。"
+        );
+
+
+        // =========================================
+        // TekoSystemへ直接通知
+        // =========================================
+
+        TekoSystem tekoSystem =
+            FindFirstObjectByType<TekoSystem>();
+
+
+        if (tekoSystem != null)
+        {
+            Debug.Log(
+                "PlacementManager : TekoSystemに重い石配置を通知します。"
+            );
+
+
+            tekoSystem.重い石を受け取った(
+                newHeavyStone
+            );
+        }
+        else
+        {
+            Debug.LogWarning(
+                "PlacementManager : TekoSystemが見つかりません。"
+            );
+        }
+
+
+        // =========================================
+        // インベントリから1個消費
+        // =========================================
+
+        InventoryManager inventoryManager =
+            GameManager.Instance.GetInventoryManager();
+
+
+        if (inventoryManager != null)
+        {
+            inventoryManager.UseHeavyStone();
+        }
+
+
+        // =========================================
+        // まだ重い石が残っているか
+        // =========================================
+
+        if (inventoryManager != null &&
+            inventoryManager.GetHeavyStone() > 0)
+        {
+            Debug.Log(
+                "PlacementManager : 重い石が残っているため配置モード継続"
+            );
+        }
+        else
+        {
+            CancelPlacement();
+        }
+    }
+
+
+    // =========================================
+    // 配置モード終了
+    // =========================================
+
+    public void CancelPlacement()
+    {
+        placingWoodenStake = false;
+        placingWoodBridge = false;
+        placingNutritionItem = false;
+        placingLilyPad = false;
+        placingHeavyStone = false;
+
+
+        isRotating = false;
+
+
+        if (previewObject != null)
+        {
+            Destroy(previewObject);
+            previewObject = null;
+        }
+    }
+
+
+    // =========================================
+    // 配置可能かチェック
+    // =========================================
+
+    private bool CanPlace()
+    {
+        return
+            Time.time -
+            placementStartTime >=
+            placementDelay;
+    }
+
+
+    // =========================================
+    // 橋配置エリア内かチェック
+    // =========================================
+
+    private bool IsInBridgeZone(Vector3 point)
+    {
+        Collider[] bridgeZones =
+            Physics.OverlapBox(
+                point,
+                Vector3.one * 0.1f,
+                Quaternion.identity,
+                bridgeZoneLayer
+            );
+
+
+        return bridgeZones.Length > 0;
+    }
+
 
     // =========================================
     // 杭が地面に触れているかチェック
     // =========================================
-    private bool CheckIfStakeEmbedded(GameObject stake, Vector3 surfaceNormal, bool isWall)
+
+    private bool CheckIfStakeEmbedded(
+        GameObject stake,
+        Vector3 surfaceNormal,
+        bool isWall)
     {
         if (isWall)
         {
-            // 壁の場合：杭の方向にレイキャストして壁に触れているかチェック
-            Vector3 stakeDirection = stake.transform.forward;
-            Ray ray = new Ray(stake.transform.position, stakeDirection);
+            // =====================================
+            // 壁
+            // =====================================
+
+            Vector3 stakeDirection =
+                stake.transform.forward;
+
+
+            Ray ray =
+                new Ray(
+                    stake.transform.position,
+                    stakeDirection
+                );
+
+
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, stakeDepth * 2, placeableLayers))
+
+            if (Physics.Raycast(
+                ray,
+                out hit,
+                stakeDepth * 2,
+                placeableLayers))
             {
                 return true;
             }
         }
         else
         {
-            // 地面の場合：杭の位置から下方にレイキャストして地面をチェック
-            Vector3 downward = Vector3.down;
-            Ray ray = new Ray(stake.transform.position, downward);
+            // =====================================
+            // 地面
+            // =====================================
+
+            Vector3 downward =
+                Vector3.down;
+
+
+            Ray ray =
+                new Ray(
+                    stake.transform.position,
+                    downward
+                );
+
+
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 0.1f, placeableLayers))
+
+            if (Physics.Raycast(
+                ray,
+                out hit,
+                0.1f,
+                placeableLayers))
             {
                 return true;
             }
         }
+
 
         return false;
     }

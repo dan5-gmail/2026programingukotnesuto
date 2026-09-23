@@ -6,12 +6,14 @@ public class Element : MonoBehaviour
     {
         Leaf,
         Wood,
-        Stone
+        Stone,
+        Moss
     }
 
 
     [Header("エレメント種類")]
     public ElementType elementType;
+
 
     [Header("ボトル回収")]
     [SerializeField]
@@ -20,20 +22,22 @@ public class Element : MonoBehaviour
     [SerializeField]
     private float collectSpeed = 0.02f;
 
-    private Bottle bottle;
 
+    private Bottle bottle;
     private Renderer rend;
 
-    void Start()
+
+    private void Start()
     {
         rend = GetComponent<Renderer>();
 
         bottle = FindFirstObjectByType<Bottle>();
+
+        SetColor();
     }
 
 
-
-    void Update()
+    private void Update()
     {
         CollectBottle();
     }
@@ -41,33 +45,59 @@ public class Element : MonoBehaviour
 
     private void CollectBottle()
     {
-        if (bottle == null) return;
+        if (bottle == null)
+            return;
 
-        // Z軸含めない
-        Vector2 myPos = new Vector2(transform.position.x, transform.position.y);
-        Vector2 bottlePos = new Vector2(bottle.transform.position.x, bottle.transform.position.y);
 
-        float distance = Vector2.Distance(myPos, bottlePos);
+        // Z軸は無視
+        Vector2 myPos =
+            new Vector2(
+                transform.position.x,
+                transform.position.y
+            );
+
+        Vector2 bottlePos =
+            new Vector2(
+                bottle.transform.position.x,
+                bottle.transform.position.y
+            );
+
+
+        float distance =
+            Vector2.Distance(
+                myPos,
+                bottlePos
+            );
+
 
         if (distance <= collectRange)
         {
-            // 距離が近ければ近いほど速くなる
-            float speed = collectSpeed * (collectRange - distance + 0.1f);
+            // 距離が近いほど速くなる
+            float speed =
+                collectSpeed *
+                (collectRange - distance + 0.1f);
 
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                bottle.transform.position,
-                speed * Time.fixedDeltaTime
-            );
 
-            // 近づいたら回収
+            transform.position =
+                Vector3.MoveTowards(
+                    transform.position,
+                    bottle.transform.position,
+                    speed * Time.deltaTime
+                );
+
+
+            // 十分近づいたら回収
             if (distance < 0.03f)
             {
-                bottle.AddElement(elementType);
+                bottle.AddElement(
+                    elementType
+                );
+
                 Destroy(gameObject);
             }
         }
     }
+
 
     public void SetElement(ElementType type)
     {
@@ -75,49 +105,105 @@ public class Element : MonoBehaviour
 
         if (rend == null)
         {
-            rend = GetComponent<Renderer>();
-
-
-            setColor();
+            rend =
+                GetComponent<Renderer>();
         }
+
+        SetColor();
     }
 
-    private void setColor()
+
+    private void SetColor()
     {
-        rend.material.EnableKeyword("_EMISSION");
+        if (rend == null)
+            return;
+
+
+        rend.material.EnableKeyword(
+            "_EMISSION"
+        );
+
 
         switch (elementType)
         {
             case ElementType.Leaf:
                 {
-                    Color leafColor = Color.green;
+                    Color leafColor =
+                        Color.green;
 
-                    rend.material.color = leafColor;
-                    // 発光
-                    rend.material.SetColor("_EmissionColor", leafColor * 3f);
+                    rend.material.color =
+                        leafColor;
+
+                    rend.material.SetColor(
+                        "_EmissionColor",
+                        leafColor * 3f
+                    );
+
                     break;
                 }
+
+
             case ElementType.Wood:
                 {
-                    Color woodColor = new Color(0.6f, 0.3f, 0.1f);
+                    Color woodColor =
+                        new Color(
+                            0.6f,
+                            0.3f,
+                            0.1f
+                        );
 
-                    rend.material.color = woodColor;
+                    rend.material.color =
+                        woodColor;
 
-                    // 発光
-                    rend.material.SetColor("_EmissionColor", woodColor * 1.5f);
+                    rend.material.SetColor(
+                        "_EmissionColor",
+                        woodColor * 1.5f
+                    );
+
                     break;
                 }
+
+
             case ElementType.Stone:
                 {
-                    Color stoneColor = new Color(0.5f, 0.5f, 0.5f);
+                    Color stoneColor =
+                        new Color(
+                            0.5f,
+                            0.5f,
+                            0.5f
+                        );
 
-                    rend.material.color = stoneColor;
+                    rend.material.color =
+                        stoneColor;
 
-                    // 発光
-                    rend.material.SetColor("_EmissionColor", stoneColor * 1.5f);
+                    rend.material.SetColor(
+                        "_EmissionColor",
+                        stoneColor * 1.5f
+                    );
+
+                    break;
+                }
+
+
+            case ElementType.Moss:
+                {
+                    Color mossColor =
+                        new Color(
+                            0.15f,
+                            0.55f,
+                            0.12f
+                        );
+
+                    rend.material.color =
+                        mossColor;
+
+                    rend.material.SetColor(
+                        "_EmissionColor",
+                        mossColor * 2f
+                    );
+
                     break;
                 }
         }
     }
-
 }

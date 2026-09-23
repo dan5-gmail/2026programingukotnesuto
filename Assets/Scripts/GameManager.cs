@@ -62,6 +62,11 @@ public class GameManager : MonoBehaviour
         int amount
     )
     {
+        if (editorlogManager == null)
+        {
+            return;
+        }
+
         editorlogManager.AddLog(type, amount);
     }
 
@@ -73,6 +78,11 @@ public class GameManager : MonoBehaviour
         int amount
     )
     {
+        if (editorlogManager == null)
+        {
+            return;
+        }
+
         editorlogManager.AddCraftLog(
             itemName,
             amount
@@ -84,6 +94,11 @@ public class GameManager : MonoBehaviour
     // =========================================
     public void CraftErrorLog(string message)
     {
+        if (editorlogManager == null)
+        {
+            return;
+        }
+
         editorlogManager.AddErrorLog(message);
     }
 
@@ -114,6 +129,32 @@ public class GameManager : MonoBehaviour
     }
 
     // =========================================
+    // 栄養アイテムをクラフト
+    // =========================================
+    public void CraftNutritionItem()
+    {
+        if (craftManager == null)
+        {
+            return;
+        }
+
+        craftManager.CraftNutritionItem();
+    }
+
+    // =========================================
+    // 睡蓮をクラフト
+    // =========================================
+    public void CraftLilyPad()
+    {
+        if (craftManager == null)
+        {
+            return;
+        }
+
+        craftManager.CraftLilyPad();
+    }
+
+    // =========================================
     // ゴール達成ログ
     // =========================================
     public void GoalReached()
@@ -123,7 +164,10 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        editorlogManager.AddCraftLog("Level Cleared!", 1);
+        editorlogManager.AddCraftLog(
+            "Level Cleared!",
+            1
+        );
     }
 
     // =========================================
@@ -150,5 +194,57 @@ public class GameManager : MonoBehaviour
         }
 
         placementManager.StartWoodBridgePlacement();
+    }
+
+    // =========================================
+    // 栄養アイテムの設置開始
+    // =========================================
+    public void StartNutritionItemPlacement()
+    {
+        if (placementManager == null)
+        {
+            return;
+        }
+
+        placementManager.StartNutritionItemPlacement();
+    }
+
+    // =========================================
+    // 睡蓮の設置開始
+    // =========================================
+    public void StartLilyPadPlacement()
+    {
+        if (placementManager == null)
+        {
+            return;
+        }
+
+        placementManager.StartLilyPadPlacement();
+    }
+
+    // =========================================
+    // 重い石をクラフト
+    // =========================================
+    public void CraftHeavyStone()
+    {
+        if (craftManager == null)
+        {
+            return;
+        }
+
+        craftManager.CraftHeavyStone();
+    }
+
+    // =========================================
+    // 重い石の設置開始
+    // =========================================
+    public void StartHeavyStonePlacement()
+    {
+        if (placementManager == null)
+        {
+            return;
+        }
+
+        placementManager.StartHeavyStonePlacement();
     }
 }
