@@ -25,9 +25,7 @@ public class PPlayerAutoMove : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.3f;
 
     [Header("Goal")]
-    [SerializeField] private GameObject fadeCube;
-    [SerializeField] private GameObject tutorialClearText;
-    [SerializeField] private float clearTextDelay = 1.0f;
+    [SerializeField] private GoalEnter goalEnter;
 
     [Header("Debug")]
     [SerializeField] private bool debugLog = true;
@@ -63,6 +61,13 @@ public class PPlayerAutoMove : MonoBehaviour
             animator = GetComponent<Animator>();
         }
 
+        // GoalEnterがInspectorに設定されていない場合
+        // シーンから自動取得
+        if (goalEnter == null)
+        {
+            goalEnter = FindFirstObjectByType<GoalEnter>();
+        }
+
         rb.freezeRotation = true;
 
         // 2.5D
@@ -83,12 +88,6 @@ public class PPlayerAutoMove : MonoBehaviour
         reachedGoal = false;
 
         stateTimer = walkTime;
-
-        // クリア表示は最初は非表示
-        if (tutorialClearText != null)
-        {
-            tutorialClearText.SetActive(false);
-        }
 
         if (animator != null)
         {
@@ -356,62 +355,15 @@ public class PPlayerAutoMove : MonoBehaviour
         // Playerを停止
         StopPlayer();
 
-        // クリア演出開始
-        StartCoroutine(GoalClearSequence());
-    }
-
-
-    // =========================================================
-    // Goalクリア演出
-    // =========================================================
-
-    private IEnumerator GoalClearSequence()
-    {
-        if (debugLog)
+        // GoalEnterへクリアを通知
+        if (goalEnter != null)
         {
-            Debug.Log("PPlayerAutoMove : FadeCube起動！");
-        }
-
-        // -----------------------------------------------------
-        // FadeCubeを起動
-        // -----------------------------------------------------
-
-        if (fadeCube != null)
-        {
-            fadeCube.SetActive(true);
+            goalEnter.PlayerGoalClear();
         }
         else
         {
             Debug.LogWarning(
-                "PPlayerAutoMove : FadeCubeが設定されていません。"
-            );
-        }
-
-        // -----------------------------------------------------
-        // 暗転を待つ
-        // -----------------------------------------------------
-
-        yield return new WaitForSeconds(clearTextDelay);
-
-        // -----------------------------------------------------
-        // 「チュートリアルクリア！」表示
-        // -----------------------------------------------------
-
-        if (tutorialClearText != null)
-        {
-            tutorialClearText.SetActive(true);
-
-            if (debugLog)
-            {
-                Debug.Log(
-                    "PPlayerAutoMove : ★★★ チュートリアルクリア！ ★★★"
-                );
-            }
-        }
-        else
-        {
-            Debug.LogWarning(
-                "PPlayerAutoMove : TutorialClearTextが設定されていません。"
+                "PPlayerAutoMove : GoalEnterが見つかりません。"
             );
         }
     }
@@ -478,6 +430,12 @@ public class PPlayerAutoMove : MonoBehaviour
         isJumping = false;
 
         stateTimer = walkTime;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", true);
+            animator.SetBool("IsJumping", false);
+        }
     }
 
 

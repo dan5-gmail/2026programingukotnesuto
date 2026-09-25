@@ -1,5 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
+
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 
 public class GoalEnter : MonoBehaviour
 {
@@ -86,24 +92,99 @@ public class GoalEnter : MonoBehaviour
 
 
     // ========================================
+    // Editor → Player Text
+    // ========================================
+
+    [Header("Editor → Player Text")]
+
+    [Tooltip("EditorからPlayerへ移行するときに表示する3D TextMeshPro")]
+    [SerializeField]
+    private GameObject editorGoalTextObject;
+
+    [Tooltip("Editor→Player移行時に表示する文章")]
+    [SerializeField]
+    private string transitionMessage =
+        "EditorからPlayerへ移り変わる";
+
+    [Tooltip("移行中テキストの点滅速度")]
+    [SerializeField]
+    private float transitionBlinkSpeed = 2f;
+
+    [Tooltip("移行中テキストの最低Alpha")]
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float transitionMinAlpha = 0.65f;
+
+
+    // ========================================
+    // Tutorial Clear Text
+    // ========================================
+
+    [Header("Tutorial Clear Text")]
+
+    [Tooltip("Player Goal時に表示する3D TextMeshPro")]
+    [SerializeField]
+    private GameObject tutorialClearText;
+
+    [Tooltip("Player Goal時に表示する文章")]
+    [SerializeField]
+    private string clearMessage =
+        "チュートリアルクリア！";
+
+    [Tooltip("本編開始時に表示する文章")]
+    [SerializeField]
+    private string mainGameMessage =
+        "Main Game";
+
+
+    // ========================================
+    // Main Game / Level 2
+    // ========================================
+
+    [Header("Main Game / Level 2")]
+
+    [Tooltip("本編のシーン名")]
+    [SerializeField]
+    private string level2SceneName =
+        "MainGameScene";
+
+    [Tooltip("Unity EditorのPlay Modeでロードする本編Sceneのパス")]
+    [SerializeField]
+    private string level2ScenePath =
+        "Assets/Scenes/MainGameScene.unity";
+
+    [Tooltip("クリア表示から本編ロードまでの待機時間")]
+    [SerializeField]
+    private float level2LoadDelay = 2f;
+
+
+    // ========================================
     // 内部変数
     // ========================================
 
     private bool triggered = false;
 
-    private GameObject editorObject;
+    // Player Goalの二重実行防止
+    private bool playerGoalTriggered = false;
 
+    private GameObject editorObject;
     private GameObject spawnedPlayer;
 
     private Camera playerCamera;
-
     private PlayerCameraFollow playerCameraFollow;
 
     private MonoBehaviour playerMoveScript;
 
     private Renderer fadeRenderer;
-
     private Material fadeMaterial;
+
+    // Player Goal用TMP
+    private TextMeshPro tutorialText;
+
+    // Editor → Player用TMP
+    private TextMeshPro EditorGoaltext;
+
+    private Coroutine transitionBlinkCoroutine;
 
 
     // ========================================
@@ -113,18 +194,52 @@ public class GoalEnter : MonoBehaviour
     private void Start()
     {
         // ========================================
-        // Editor Camera = MainCamera
+        // Editor
         // ========================================
 
-        if (editorCamera != null)
+        if (editor != null)
         {
-            editorCamera.gameObject.SetActive(true);
-            editorCamera.enabled = true;
+            editorObject = editor.gameObject;
+        }
+
+
+        // ========================================
+        // Editor → Player Text
+        // ========================================
+
+        if (editorGoalTextObject != null)
+        {
+            EditorGoaltext =
+                editorGoalTextObject.GetComponent<TextMeshPro>();
+
+            if (EditorGoaltext != null)
+            {
+                // ゲーム開始時は非表示
+                editorGoalTextObject.SetActive(false);
+
+                // Alphaは100%
+                Color color =
+                    EditorGoaltext.color;
+
+                color.r = 1f;
+                color.g = 1f;
+                color.b = 1f;
+                color.a = 1f;
+
+                EditorGoaltext.color =
+                    color;
+            }
+            else
+            {
+                Debug.LogError(
+                    "GoalEnter : Editor Goal TextにTextMeshProがありません。"
+                );
+            }
         }
         else
         {
-            Debug.LogError(
-                "GoalEnter : Editor Camera（Main Camera）が設定されていません。"
+            Debug.LogWarning(
+                "GoalEnter : Editor Goal Textが設定されていません。"
             );
         }
 
@@ -161,6 +276,47 @@ public class GoalEnter : MonoBehaviour
                 "GoalEnter : Fade Cubeが設定されていません。"
             );
         }
+
+
+        // ========================================
+        // Tutorial Clear Text
+        // ========================================
+
+        if (tutorialClearText != null)
+        {
+            tutorialText =
+                tutorialClearText.GetComponent<TextMeshPro>();
+
+            if (tutorialText != null)
+            {
+                // 最初は非表示
+                tutorialClearText.SetActive(false);
+
+                // 白文字
+                Color textColor =
+                    tutorialText.color;
+
+                textColor.r = 1f;
+                textColor.g = 1f;
+                textColor.b = 1f;
+                textColor.a = 1f;
+
+                tutorialText.color =
+                    textColor;
+            }
+            else
+            {
+                Debug.LogError(
+                    "GoalEnter : Tutorial Clear TextにTextMeshProがありません。"
+                );
+            }
+        }
+        else
+        {
+            Debug.LogWarning(
+                "GoalEnter : Tutorial Clear Textが設定されていません。"
+            );
+        }
     }
 
 
@@ -195,18 +351,18 @@ public class GoalEnter : MonoBehaviour
 
         triggered = true;
 
-        editorObject = other.gameObject;
-
+        editorObject =
+            other.gameObject;
 
         Debug.Log(
             "GoalEnter : EditorがGoalに到達しました。"
         );
 
-
         StartCoroutine(
             GoalSequence()
         );
     }
+
 
     private void OnTriggerExit(Collider other)
     {
@@ -219,7 +375,9 @@ public class GoalEnter : MonoBehaviour
         // Editorがゴールから離れたらリセット
         triggered = false;
 
-        Debug.Log("GoalEnter : Editorがゴールから離れました。判定をリセットします。");
+        Debug.Log(
+            "GoalEnter : Editorがゴールから離れました。判定をリセットします。"
+        );
     }
 
 
@@ -257,14 +415,20 @@ public class GoalEnter : MonoBehaviour
             }
         }
 
-
         yield return StartCoroutine(
             FadeTo(1f)
         );
 
 
         // ========================================
-        // ③ Editor非表示
+        // ③ Editor → Player テキスト表示
+        // ========================================
+
+        ShowTransitionText();
+
+
+        // ========================================
+        // ④ Editor非表示
         // ========================================
 
         if (editorObject != null)
@@ -278,7 +442,7 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ④ Player Prefab確認
+        // ⑤ Player Prefab確認
         // ========================================
 
         if (playerPrefab == null)
@@ -287,7 +451,7 @@ public class GoalEnter : MonoBehaviour
                 "GoalEnter : Player Prefabが設定されていません。"
             );
 
-            // Editorを復帰
+            HideEditorGoalText();
             RestoreEditor();
 
             yield break;
@@ -295,11 +459,10 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑤ Player生成位置確認
+        // ⑥ Player生成位置確認
         // ========================================
 
         Vector3 spawnPosition;
-
 
         if (useDirectPosition)
         {
@@ -314,12 +477,11 @@ public class GoalEnter : MonoBehaviour
                     "GoalEnter : Player Spawn Pointが設定されていません。"
                 );
 
-                // Editorを復帰
+                HideEditorGoalText();
                 RestoreEditor();
 
                 yield break;
             }
-
 
             spawnPosition =
                 playerSpawnPoint.position;
@@ -327,26 +489,21 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑥ Player生成
-        //
-        // ここでは既存Playerを勝手に探して
-        // Destroyしない
+        // ⑦ Player生成
         // ========================================
 
-        spawnedPlayer = Instantiate(
-            playerPrefab,
-            spawnPosition,
-            Quaternion.identity
-        );
-
+        spawnedPlayer =
+            Instantiate(
+                playerPrefab,
+                spawnPosition,
+                Quaternion.identity
+            );
 
         spawnedPlayer.transform.localScale =
             playerScale;
 
-
         spawnedPlayer.transform.position =
             spawnPosition;
-
 
         Debug.Log(
             $"GoalEnter : Playerを生成しました。位置 = {spawnPosition}"
@@ -354,22 +511,19 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑦ Player自動移動取得
+        // ⑧ Player自動移動取得
         // ========================================
 
         PPlayerAutoMove autoMove =
             spawnedPlayer.GetComponent<PPlayerAutoMove>();
-
 
         if (autoMove != null)
         {
             playerMoveScript =
                 autoMove;
 
-
             // 生成直後は停止
             autoMove.enabled = false;
-
 
             Debug.Log(
                 "GoalEnter : Playerの自動移動を一時停止しました。"
@@ -379,7 +533,6 @@ public class GoalEnter : MonoBehaviour
         {
             playerMoveScript = null;
 
-
             Debug.LogWarning(
                 "GoalEnter : PlayerにPPlayerAutoMoveがありません。"
             );
@@ -387,12 +540,11 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑧ Animator初期化
+        // ⑨ Animator初期化
         // ========================================
 
         Animator playerAnimator =
             spawnedPlayer.GetComponentInChildren<Animator>();
-
 
         if (playerAnimator != null)
         {
@@ -409,12 +561,11 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑨ Player Camera取得
+        // ⑩ Player Camera取得
         // ========================================
 
         playerCamera =
             spawnedPlayer.GetComponentInChildren<Camera>(true);
-
 
         if (playerCamera == null)
         {
@@ -424,6 +575,7 @@ public class GoalEnter : MonoBehaviour
 
             Destroy(spawnedPlayer);
 
+            HideEditorGoalText();
             RestoreEditor();
 
             yield break;
@@ -431,12 +583,11 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑩ Player Camera Follow取得
+        // ⑪ Player Camera Follow取得
         // ========================================
 
         playerCameraFollow =
             playerCamera.GetComponent<PlayerCameraFollow>();
-
 
         if (playerCameraFollow == null)
         {
@@ -446,6 +597,7 @@ public class GoalEnter : MonoBehaviour
 
             Destroy(spawnedPlayer);
 
+            HideEditorGoalText();
             RestoreEditor();
 
             yield break;
@@ -453,15 +605,14 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑪ Player Camera Follow Target設定
+        // ⑫ Player Camera Follow Target設定
         // ========================================
 
         playerCameraFollow.target =
             spawnedPlayer.transform;
 
-
-        playerCameraFollow.enabled = true;
-
+        playerCameraFollow.enabled =
+            true;
 
         Debug.Log(
             "GoalEnter : PlayerCameraFollowのTargetをPlayerに設定しました。"
@@ -469,13 +620,11 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑫ Player Camera ON
+        // ⑬ Player Camera ON
         // ========================================
 
         playerCamera.gameObject.SetActive(true);
-
         playerCamera.enabled = true;
-
 
         Debug.Log(
             "GoalEnter : Player Camera ON"
@@ -483,14 +632,13 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑬ Main Camera OFF
+        // ⑭ Main Camera OFF
         // ========================================
 
         if (editorCamera != null)
         {
             editorCamera.enabled = false;
             editorCamera.gameObject.SetActive(false);
-
 
             Debug.Log(
                 "GoalEnter : Main Camera OFF"
@@ -499,23 +647,30 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑭ カメラ切り替えを確定
+        // ⑮ カメラ切り替えを確定
         // ========================================
 
         yield return null;
 
 
         // ========================================
-        // ⑮ 少し待機
+        // ⑯ Editor → Player表示時間
         // ========================================
 
         yield return new WaitForSeconds(
-            0.3f
+            3f
         );
 
 
         // ========================================
-        // ⑯ 明転
+        // ⑰ Editor → Playerテキストを消す
+        // ========================================
+
+        HideEditorGoalText();
+
+
+        // ========================================
+        // ⑱ 明転
         // ========================================
 
         yield return StartCoroutine(
@@ -524,14 +679,13 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑰ Fade Cube非表示
+        // ⑲ Fade Cube非表示
         // ========================================
 
         if (fadeRenderer != null)
         {
             fadeRenderer.enabled = false;
         }
-
 
         if (fadeCube != null)
         {
@@ -540,7 +694,7 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑱ Player開始前待機
+        // ⑳ Player開始前待機
         // ========================================
 
         yield return new WaitForSeconds(
@@ -549,13 +703,12 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑲ Player開始
+        // ㉑ Player開始
         // ========================================
 
         if (playerMoveScript != null)
         {
             playerMoveScript.enabled = true;
-
 
             Debug.Log(
                 "GoalEnter : Playerの自動移動を開始しました。"
@@ -564,12 +717,322 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑳ Goal処理完了
+        // ㉒ Goal処理完了
         // ========================================
 
         Debug.Log(
             "GoalEnter : Goal処理完了。Playerステージへ移行しました。"
         );
+    }
+
+
+    // ========================================
+    // Editor → Player テキスト表示
+    // ========================================
+
+    private void ShowTransitionText()
+    {
+        if (EditorGoaltext == null)
+            return;
+
+        EditorGoaltext.text =
+            transitionMessage;
+
+        Color color =
+            EditorGoaltext.color;
+
+        color.r = 1f;
+        color.g = 1f;
+        color.b = 1f;
+        color.a = 1f;
+
+        EditorGoaltext.color =
+            color;
+
+        EditorGoaltext.gameObject.SetActive(true);
+
+        if (transitionBlinkCoroutine != null)
+        {
+            StopCoroutine(
+                transitionBlinkCoroutine
+            );
+        }
+
+        transitionBlinkCoroutine =
+            StartCoroutine(
+                BlinkTransitionText()
+            );
+    }
+
+
+    // ========================================
+    // Editor → Player テキスト点滅
+    // ========================================
+
+    private IEnumerator BlinkTransitionText()
+    {
+        while (
+            EditorGoaltext != null &&
+            EditorGoaltext.gameObject.activeSelf
+        )
+        {
+            float alpha =
+                transitionMinAlpha +
+                (1f - transitionMinAlpha) *
+                (Mathf.Sin(
+                    Time.time *
+                    transitionBlinkSpeed
+                ) + 1f) *
+                0.5f;
+
+            Color color =
+                EditorGoaltext.color;
+
+            color.a =
+                alpha;
+
+            EditorGoaltext.color =
+                color;
+
+            yield return null;
+        }
+    }
+
+
+    // ========================================
+    // Editor → Player テキスト非表示
+    // ========================================
+
+    private void HideEditorGoalText()
+    {
+        if (transitionBlinkCoroutine != null)
+        {
+            StopCoroutine(
+                transitionBlinkCoroutine
+            );
+
+            transitionBlinkCoroutine = null;
+        }
+
+        if (EditorGoaltext != null)
+        {
+            EditorGoaltext.gameObject.SetActive(false);
+
+            Color color =
+                EditorGoaltext.color;
+
+            color.a = 1f;
+
+            EditorGoaltext.color =
+                color;
+        }
+    }
+
+
+    // ========================================
+    // Player Goal Clear
+    // ========================================
+
+    public void PlayerGoalClear()
+    {
+        // 二重実行防止
+        if (playerGoalTriggered)
+            return;
+
+        playerGoalTriggered = true;
+
+        StartCoroutine(
+            PlayerGoalClearSequence()
+        );
+    }
+
+
+    private IEnumerator PlayerGoalClearSequence()
+    {
+        Debug.Log(
+            "GoalEnter : PlayerがGoalに到達しました。"
+        );
+
+
+        // ========================================
+        // ① Player停止
+        // ========================================
+
+        if (spawnedPlayer != null)
+        {
+            PPlayerAutoMove autoMove =
+                spawnedPlayer.GetComponent<PPlayerAutoMove>();
+
+            if (autoMove != null)
+            {
+                autoMove.StopPlayer();
+            }
+        }
+
+
+        // ========================================
+        // ② FadeCube表示
+        // ========================================
+
+        if (fadeCube != null)
+        {
+            fadeCube.SetActive(true);
+        }
+
+        if (fadeRenderer != null)
+        {
+            fadeRenderer.enabled = true;
+        }
+
+
+        // ========================================
+        // ③ Editor → Playerテキストを消す
+        // ========================================
+
+        HideEditorGoalText();
+
+
+        // ========================================
+        // ④ 暗転
+        // ========================================
+
+        yield return StartCoroutine(
+            FadeTo(1f)
+        );
+
+
+        // ========================================
+        // ⑤ 「チュートリアルクリア！」
+        //    ＋「Main Game」表示
+        // ========================================
+
+        if (tutorialClearText != null)
+        {
+            if (tutorialText == null)
+            {
+                tutorialText =
+                    tutorialClearText.GetComponent<TextMeshPro>();
+            }
+
+            if (tutorialText != null)
+            {
+                tutorialText.text =
+                    clearMessage +
+                    "\n\n" +
+                    mainGameMessage;
+
+                Color color =
+                    tutorialText.color;
+
+                color.r = 1f;
+                color.g = 1f;
+                color.b = 1f;
+                color.a = 1f;
+
+                tutorialText.color =
+                    color;
+
+                tutorialClearText.SetActive(true);
+
+                Debug.Log(
+                    "GoalEnter : チュートリアルクリア！"
+                );
+
+                Debug.Log(
+                    "GoalEnter : Main Gameを表示しました。"
+                );
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "GoalEnter : Tutorial Clear TextにTextMeshProがありません。"
+                );
+            }
+        }
+        else
+        {
+            Debug.LogWarning(
+                "GoalEnter : Tutorial Clear Textが設定されていません。"
+            );
+        }
+
+
+        // ========================================
+        // ⑥ 本編ロード前待機
+        // ========================================
+
+        yield return new WaitForSeconds(
+            level2LoadDelay
+        );
+
+
+        // ========================================
+        // ⑦ 本編Sceneロード
+        // ========================================
+
+        LoadMainGameScene();
+    }
+
+
+    // ========================================
+    // Main Game Sceneロード
+    // ========================================
+
+    private void LoadMainGameScene()
+    {
+        if (string.IsNullOrEmpty(level2SceneName))
+        {
+            Debug.LogError(
+                "GoalEnter : 本編シーン名が設定されていません。"
+            );
+
+            return;
+        }
+
+
+        // ========================================
+        // Unity Editor
+        // ========================================
+
+#if UNITY_EDITOR
+
+        if (string.IsNullOrEmpty(level2ScenePath))
+        {
+            Debug.LogError(
+                "GoalEnter : Editor用Scene Pathが設定されていません。"
+            );
+
+            return;
+        }
+
+        Debug.Log(
+            $"GoalEnter : Unity Editor Play Modeで本編をロードします。Path = {level2ScenePath}"
+        );
+
+        EditorSceneManager.LoadSceneInPlayMode(
+            level2ScenePath,
+            new LoadSceneParameters(
+                LoadSceneMode.Single
+            )
+        );
+
+
+        // ========================================
+        // 実際のビルド
+        // ========================================
+
+#else
+
+        Debug.Log(
+            $"GoalEnter : ビルド版で本編をロードします。Scene = {level2SceneName}"
+        );
+
+        SceneManager.LoadScene(
+            level2SceneName,
+            LoadSceneMode.Single
+        );
+
+#endif
     }
 
 
@@ -584,7 +1047,6 @@ public class GoalEnter : MonoBehaviour
         {
             editorCamera.gameObject.SetActive(true);
             editorCamera.enabled = true;
-
 
             Debug.Log(
                 "GoalEnter : Main Cameraを復帰しました。"
@@ -624,24 +1086,21 @@ public class GoalEnter : MonoBehaviour
         if (fadeMaterial == null)
             yield break;
 
-
         float startAlpha =
             GetFadeAlpha();
 
-
         float elapsed = 0f;
-
 
         while (elapsed < fadeDuration)
         {
-            elapsed += Time.deltaTime;
-
+            elapsed +=
+                Time.deltaTime;
 
             float t =
                 Mathf.Clamp01(
-                    elapsed / fadeDuration
+                    elapsed /
+                    fadeDuration
                 );
-
 
             float alpha =
                 Mathf.Lerp(
@@ -650,13 +1109,10 @@ public class GoalEnter : MonoBehaviour
                     t
                 );
 
-
             SetFadeAlpha(alpha);
-
 
             yield return null;
         }
-
 
         SetFadeAlpha(
             targetAlpha
@@ -673,13 +1129,11 @@ public class GoalEnter : MonoBehaviour
         if (fadeMaterial == null)
             return;
 
-
         Color color =
             fadeMaterial.color;
 
-
-        color.a = alpha;
-
+        color.a =
+            alpha;
 
         fadeMaterial.color =
             color;
@@ -694,7 +1148,6 @@ public class GoalEnter : MonoBehaviour
     {
         if (fadeMaterial == null)
             return 0f;
-
 
         return fadeMaterial.color.a;
     }

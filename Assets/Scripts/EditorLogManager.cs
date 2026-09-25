@@ -55,6 +55,14 @@ public class EditorLogManager : MonoBehaviour
                 itemColor = "#AAAAAA"; // 灰色
                 break;
 
+            // =================================================
+            // Moss
+            // =================================================
+            case Element.ElementType.Moss:
+                itemName = "Moss";
+                itemColor = "#228B22"; // 深めの緑
+                break;
+
             default:
                 itemName = "Unknown";
                 itemColor = "#FFFFFF";
@@ -138,7 +146,10 @@ public class EditorLogManager : MonoBehaviour
     {
         if (logText == null)
         {
-            Debug.LogWarning("EditorLogManager : logTextが設定されていません");
+            Debug.LogWarning(
+                "EditorLogManager : logTextが設定されていません"
+            );
+
             return;
         }
 
@@ -154,6 +165,10 @@ public class EditorLogManager : MonoBehaviour
             logText.text += logs[i] + "\n";
         }
 
-        Debug.Log($"EditorLogManager : ログ更新完了 - {logs.Count}件のログ、{end - topIndex}件表示");
+        Debug.Log(
+            $"EditorLogManager : ログ更新完了 - " +
+            $"{logs.Count}件のログ、" +
+            $"{end - topIndex}件表示"
+        );
     }
 }
