@@ -3,10 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-#if UNITY_EDITOR
-using UnityEditor.SceneManagement;
-#endif
-
 public class GoalEnter : MonoBehaviour
 {
     // ========================================
@@ -117,45 +113,14 @@ public class GoalEnter : MonoBehaviour
 
 
     // ========================================
-    // Tutorial Clear Text
+    // Game Clear Scene
     // ========================================
 
-    [Header("Tutorial Clear Text")]
+    [Header("Game Clear Scene")]
 
-    [Tooltip("Player Goal時に表示する3D TextMeshPro")]
+    [Tooltip("PlayerがGoalに到達したときにロードするScene名")]
     [SerializeField]
-    private GameObject tutorialClearText;
-
-    [Tooltip("Player Goal時に表示する文章")]
-    [SerializeField]
-    private string clearMessage =
-        "チュートリアルクリア！";
-
-    [Tooltip("本編開始時に表示する文章")]
-    [SerializeField]
-    private string mainGameMessage =
-        "Main Game";
-
-
-    // ========================================
-    // Main Game / Level 2
-    // ========================================
-
-    [Header("Main Game / Level 2")]
-
-    [Tooltip("本編のシーン名")]
-    [SerializeField]
-    private string level2SceneName =
-        "MainGameScene";
-
-    [Tooltip("Unity EditorのPlay Modeでロードする本編Sceneのパス")]
-    [SerializeField]
-    private string level2ScenePath =
-        "Assets/Scenes/MainGameScene.unity";
-
-    [Tooltip("クリア表示から本編ロードまでの待機時間")]
-    [SerializeField]
-    private float level2LoadDelay = 2f;
+    private string gameClearSceneName = "GameClearScene";
 
 
     // ========================================
@@ -177,9 +142,6 @@ public class GoalEnter : MonoBehaviour
 
     private Renderer fadeRenderer;
     private Material fadeMaterial;
-
-    // Player Goal用TMP
-    private TextMeshPro tutorialText;
 
     // Editor → Player用TMP
     private TextMeshPro EditorGoaltext;
@@ -276,47 +238,6 @@ public class GoalEnter : MonoBehaviour
                 "GoalEnter : Fade Cubeが設定されていません。"
             );
         }
-
-
-        // ========================================
-        // Tutorial Clear Text
-        // ========================================
-
-        if (tutorialClearText != null)
-        {
-            tutorialText =
-                tutorialClearText.GetComponent<TextMeshPro>();
-
-            if (tutorialText != null)
-            {
-                // 最初は非表示
-                tutorialClearText.SetActive(false);
-
-                // 白文字
-                Color textColor =
-                    tutorialText.color;
-
-                textColor.r = 1f;
-                textColor.g = 1f;
-                textColor.b = 1f;
-                textColor.a = 1f;
-
-                tutorialText.color =
-                    textColor;
-            }
-            else
-            {
-                Debug.LogError(
-                    "GoalEnter : Tutorial Clear TextにTextMeshProがありません。"
-                );
-            }
-        }
-        else
-        {
-            Debug.LogWarning(
-                "GoalEnter : Tutorial Clear Textが設定されていません。"
-            );
-        }
     }
 
 
@@ -383,6 +304,7 @@ public class GoalEnter : MonoBehaviour
 
     // ========================================
     // Goal Sequence
+    // Editor → Player
     // ========================================
 
     private IEnumerator GoalSequence()
@@ -847,6 +769,10 @@ public class GoalEnter : MonoBehaviour
     }
 
 
+    // ========================================
+    // Player Goal Clear Sequence
+    // ========================================
+
     private IEnumerator PlayerGoalClearSequence()
     {
         Debug.Log(
@@ -902,137 +828,45 @@ public class GoalEnter : MonoBehaviour
 
 
         // ========================================
-        // ⑤ 「チュートリアルクリア！」
-        //    ＋「Main Game」表示
+        // ⑤ 暗転完了を1フレーム確定
         // ========================================
 
-        if (tutorialClearText != null)
-        {
-            if (tutorialText == null)
-            {
-                tutorialText =
-                    tutorialClearText.GetComponent<TextMeshPro>();
-            }
+        SetFadeAlpha(1f);
 
-            if (tutorialText != null)
-            {
-                tutorialText.text =
-                    clearMessage +
-                    "\n\n" +
-                    mainGameMessage;
-
-                Color color =
-                    tutorialText.color;
-
-                color.r = 1f;
-                color.g = 1f;
-                color.b = 1f;
-                color.a = 1f;
-
-                tutorialText.color =
-                    color;
-
-                tutorialClearText.SetActive(true);
-
-                Debug.Log(
-                    "GoalEnter : チュートリアルクリア！"
-                );
-
-                Debug.Log(
-                    "GoalEnter : Main Gameを表示しました。"
-                );
-            }
-            else
-            {
-                Debug.LogWarning(
-                    "GoalEnter : Tutorial Clear TextにTextMeshProがありません。"
-                );
-            }
-        }
-        else
-        {
-            Debug.LogWarning(
-                "GoalEnter : Tutorial Clear Textが設定されていません。"
-            );
-        }
+        yield return null;
 
 
         // ========================================
-        // ⑥ 本編ロード前待機
+        // ⑥ GameClearSceneへ移動
         // ========================================
 
-        yield return new WaitForSeconds(
-            level2LoadDelay
-        );
-
-
-        // ========================================
-        // ⑦ 本編Sceneロード
-        // ========================================
-
-        LoadMainGameScene();
+        LoadGameClearScene();
     }
 
 
     // ========================================
-    // Main Game Sceneロード
+    // Game Clear Sceneロード
     // ========================================
 
-    private void LoadMainGameScene()
+    private void LoadGameClearScene()
     {
-        if (string.IsNullOrEmpty(level2SceneName))
+        if (string.IsNullOrEmpty(gameClearSceneName))
         {
             Debug.LogError(
-                "GoalEnter : 本編シーン名が設定されていません。"
-            );
-
-            return;
-        }
-
-
-        // ========================================
-        // Unity Editor
-        // ========================================
-
-#if UNITY_EDITOR
-
-        if (string.IsNullOrEmpty(level2ScenePath))
-        {
-            Debug.LogError(
-                "GoalEnter : Editor用Scene Pathが設定されていません。"
+                "GoalEnter : Game Clear Scene名が設定されていません。"
             );
 
             return;
         }
 
         Debug.Log(
-            $"GoalEnter : Unity Editor Play Modeで本編をロードします。Path = {level2ScenePath}"
-        );
-
-        EditorSceneManager.LoadSceneInPlayMode(
-            level2ScenePath,
-            new LoadSceneParameters(
-                LoadSceneMode.Single
-            )
-        );
-
-
-        // ========================================
-        // 実際のビルド
-        // ========================================
-
-#else
-
-        Debug.Log(
-            $"GoalEnter : ビルド版で本編をロードします。Scene = {level2SceneName}"
+            $"GoalEnter : GameClearSceneへ移動します。Scene = {gameClearSceneName}"
         );
 
         SceneManager.LoadScene(
-            level2SceneName,
+            gameClearSceneName,
             LoadSceneMode.Single
         );
-
-#endif
     }
 
 
@@ -1042,7 +876,7 @@ public class GoalEnter : MonoBehaviour
 
     private void RestoreEditor()
     {
-        // MainCamera ON
+        // Main Camera ON
         if (editorCamera != null)
         {
             editorCamera.gameObject.SetActive(true);
@@ -1090,6 +924,13 @@ public class GoalEnter : MonoBehaviour
             GetFadeAlpha();
 
         float elapsed = 0f;
+
+        // fadeDurationが0以下でもエラーにしない
+        if (fadeDuration <= 0f)
+        {
+            SetFadeAlpha(targetAlpha);
+            yield break;
+        }
 
         while (elapsed < fadeDuration)
         {
