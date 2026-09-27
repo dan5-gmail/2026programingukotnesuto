@@ -83,7 +83,7 @@ public class PlayerMove : MonoBehaviour
     // =========================================
     // 左右移動
     // =========================================
-
+    //~========================================
     void PlayerMoveControl()
     {
         float moveX = Input.GetAxis("Horizontal");
