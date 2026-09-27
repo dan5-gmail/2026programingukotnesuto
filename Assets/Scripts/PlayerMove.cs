@@ -92,20 +92,6 @@ public class PlayerMove : MonoBehaviour
 
     void PlayerMoveControl()
     {
-        // =========================================
-        // 速度変更
-        // =========================================
-
-        if (Input.GetKey(KeyCode.LeftShift) ||
-            Input.GetKey(KeyCode.RightShift))
-        {
-            moveSpeed = defaultMoveSpeed * 1.5f;
-        }
-        else
-        {
-            moveSpeed = defaultMoveSpeed;
-        }
-
 
         // =========================================
         // 左右入力

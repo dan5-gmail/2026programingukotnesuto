@@ -250,38 +250,26 @@ public class GoalEnter : MonoBehaviour
         // ========================================
         // すでにGoal処理中なら無視
         // ========================================
-
         if (triggered)
             return;
-
-
         // ========================================
         // Editor判定
         // ========================================
-
         if (editor != null)
         {
             if (other.gameObject != editor)
                 return;
         }
-
-
         // ========================================
         // Goal処理開始
         // ========================================
-
         triggered = true;
 
-        editorObject =
-            other.gameObject;
+        editorObject = other.gameObject;
 
-        Debug.Log(
-            "GoalEnter : EditorがGoalに到達しました。"
-        );
+        Debug.Log("GoalEnter : EditorがGoalに到達しました。");
 
-        StartCoroutine(
-            GoalSequence()
-        );
+        StartCoroutine(GoalSequence());
     }
 
 
