@@ -10,8 +10,6 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 2f;
 
-    private float defaultMoveSpeed;
-
     [SerializeField]
     private float jumpPower = 5f;
 
@@ -43,8 +41,6 @@ public class PlayerMove : MonoBehaviour
 
         // 2.5DなのでZ軸を固定
         rb.constraints |= RigidbodyConstraints.FreezePositionZ;
-
-        defaultMoveSpeed = moveSpeed;
     }
 
 
@@ -75,12 +71,10 @@ public class PlayerMove : MonoBehaviour
 
         if (isGrounded && groundNormal.y > groundNormalThreshold)
         {
-            // 重力のうち、地面に沿って働く成分を取得
             Vector3 slopeGravity =
                 gravityForce -
                 Vector3.Project(gravityForce, groundNormal);
 
-            // 坂を滑り落ちる成分だけ打ち消す
             rb.AddForce(-slopeGravity);
         }
     }
@@ -92,20 +86,10 @@ public class PlayerMove : MonoBehaviour
 
     void PlayerMoveControl()
     {
-
-        // =========================================
-        // 左右入力
-        // =========================================
-
         float moveX = Input.GetAxis("Horizontal");
 
-
-        // =========================================
-        // Rigidbodyの速度
-        // =========================================
-
+        // 通常速度のみ
         float currentX = rb.linearVelocity.x;
-
         float targetX = moveX * moveSpeed;
 
         float smoothX = Mathf.Lerp(
@@ -113,7 +97,6 @@ public class PlayerMove : MonoBehaviour
             targetX,
             0.15f
         );
-
 
         rb.linearVelocity = new Vector3(
             smoothX,
@@ -126,8 +109,6 @@ public class PlayerMove : MonoBehaviour
         // 歩きアニメーション
         // =========================================
 
-        // Input.GetAxis()の微小な値で
-        // 勝手に歩き状態にならないようにする
         bool isWalking = Mathf.Abs(moveX) > 0.1f;
 
         animator.SetBool(
@@ -165,17 +146,11 @@ public class PlayerMove : MonoBehaviour
             && isGrounded
         )
         {
-            // ジャンプ
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
                 jumpPower,
                 0
             );
-
-
-            // =========================================
-            // ジャンプアニメーション
-            // =========================================
 
             animator.SetTrigger("PlayerJump");
         }
@@ -195,7 +170,6 @@ public class PlayerMove : MonoBehaviour
 
         foreach (ContactPoint contact in collision.contacts)
         {
-            // 上向きの面を地面として認識
             if (contact.normal.y > groundNormalThreshold)
             {
                 if (!foundGround ||
